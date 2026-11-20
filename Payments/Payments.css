@@ -1,0 +1,192 @@
+/* ===== Payments.css ===== */
+/* Your main.css already styles the buttons, inputs, labels and popups. */
+
+
+/* The whole page: boxes stacked with a space between them */
+.pay {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Title on the left, buttons on the right */
+.pay-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* A white card with a thin border (used by every section) */
+.pay-box {
+  background: #FFFDFA;
+  border: 1px solid #E8DFD0;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+
+/* ----- Date row ----- */
+.pay-date-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pay-date-row .input {
+  width: 180px;
+}
+
+
+/* ----- The 4 number boxes ----- */
+.pay-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);   /* 4 equal columns */
+  gap: 12px;
+}
+
+.pay-stats strong {
+  display: block;
+  font-size: 26px;
+  margin: 6px 0;
+}
+
+/* On small screens: 2 boxes per row */
+@media (max-width: 800px) {
+  .pay-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+/* ----- The table ----- */
+.pay-title {
+  margin: 0;
+  font-size: 18px;
+}
+
+.pay-scroll {
+  overflow-x: auto;       /* the table can scroll sideways on a phone */
+  margin-top: 12px;
+}
+
+.pay-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.pay-table th {
+  text-align: left;
+  font-size: 12px;
+  color: #7A6A5A;
+  padding: 8px;
+  border-bottom: 1px solid #E8DFD0;
+}
+
+.pay-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #F0E8DA;
+}
+
+/* the Amount column sits on the right */
+.pay-table .r {
+  text-align: right;
+}
+
+/* the message when there are no payments */
+.pay-empty {
+  text-align: center;
+  padding: 40px;
+  color: #7A6A5A;
+}
+
+
+/* ----- Make the date box a normal size ----- */
+#payDate {
+  width: 180px;
+}
+
+
+/* ----- The Record Payment popup ----- */
+/* (your Inventory popup styles live in Inventory.css, so this page needs its own) */
+
+dialog {
+  margin: auto;                 /* puts the popup in the middle of the screen */
+  width: 480px;
+  max-width: 92vw;
+  padding: 22px;
+  border: 1px solid #E8DFD0;
+  border-radius: 16px;
+  background: #FFFDFA;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+/* hidden until the code opens it */
+dialog:not([open]) {
+  display: none;
+}
+
+/* the dark shadow behind the popup */
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* title on the left, X button on the right */
+dialog .dh {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+dialog .dh h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+dialog .x {
+  border: none;
+  background: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* small gray text above each box */
+dialog .label {
+  margin: 12px 0 4px;
+  font-size: 12px;
+  color: #7A6A5A;
+}
+
+dialog .input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* boxes side by side */
+dialog .two {
+  display: flex;
+  gap: 10px;
+}
+
+dialog .two > div {
+  flex: 1;
+}
+
+/* red error message */
+dialog .err {
+  color: #DC2626;
+  font-size: 13px;
+  min-height: 18px;
+}
+
+/* Cancel and Save buttons on the right */
+dialog .btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}

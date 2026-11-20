@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Payments - Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/main/main.css">
+  <link rel="stylesheet" href="/Payments/Payments.css">
+</head>
+<body>
+  <header class="sidebar">
+    <a href="/Dashboard/Dashboard.html" class="logo" aria-label="Home"><img src="/main/Logo.png" alt="Company logo"></a>
+    <nav class="menu">
+      <a href="/Dashboard/Dashboard.html" class="menu-link">Dashboard</a>
+      <a href="/Joborder/Joborder.html" class="menu-link">Job Order</a>
+      <a href="/Customers/Customers.html" class="menu-link">Customers</a>
+      <a href="/Inventory/Inventory.html" class="menu-link">Inventory</a>
+      <a href="/Payments/Payments.html" class="menu-link active">Payments</a>
+      <a href="/Reports/Reports.html" class="menu-link">Reports</a>
+    </nav>
+    <div class="welcome-box">
+      <div><p class="small-text">Welcome,</p><p class="bold-text">Admin</p></div>
+      <div class="circle">AD</div>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="pay">
+      <div class="pay-head">
+        <div>
+          <h1 class="page-title">Payments</h1>
+          <br>
+        </div>
+        <div class="head-buttons">
+          <button class="btn btn-dark" id="addPay">+ Record Payment</button>
+          <a class="btn" href="/Joborder/Joborder.html">View Repair Orders</a>
+        </div>
+      </div>
+
+      <div class="pay-box pay-date">
+        <p class="label">COLLECTION DATE (PHILIPPINE TIME)</p>
+        <div class="pay-date-row">
+          <input type="date" id="payDate" class="input">
+          <button class="btn btn-dark" id="viewBtn">View Payments</button>
+          <button class="btn" id="todayBtn">Today</button>
+          <span class="small-text" id="dateNote"></span>
+        </div>
+      </div>
+
+      <div class="pay-stats">
+        <div class="pay-box"><p class="small-text">Total Collected</p><strong id="sTotal">₱0.00</strong><p class="small-text">Collected on selected date</p></div>
+        <div class="pay-box"><p class="small-text">Transactions</p><strong id="sCount">0</strong><p class="small-text">On selected date</p></div>
+        <div class="pay-box"><p class="small-text">Cash Collected</p><strong id="sCash">₱0.00</strong><p class="small-text">Cash only</p></div>
+        <div class="pay-box"><p class="small-text">Job Orders Paid</p><strong id="sJobs">0</strong><p class="small-text">Unique job orders paid</p></div>
+      </div>
+
+      <div class="pay-box">
+        <h2 class="pay-title">Payment Records</h2>
+        <p class="small-text" id="recCount">0 payment transactions</p>
+        <div class="pay-scroll">
+          <table class="pay-table">
+            <thead><tr><th>Job Order</th><th>Customer</th><th>Method</th><th>Reference</th><th>Received by</th><th>Notes</th><th class="r">Amount</th></tr></thead>
+            <tbody id="payBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <dialog id="payDlg">
+        <div class="dh"><h2>Record Payment</h2><button class="x" id="xPay" aria-label="Close">×</button></div>
+
+        <p class="label">JOB ORDER NO.</p>
+        <input type="text" id="pJob" class="input" placeholder="Example: JO-0001">
+
+        <p class="label">CUSTOMER</p>
+        <input type="text" id="pCustomer" class="input" placeholder="Optional">
+
+        <div class="two">
+          <div><p class="label">AMOUNT (₱)</p><input type="number" id="pAmount" class="input" min="0" step="0.01" value="0"></div>
+          <div><p class="label">METHOD</p>
+            <select id="pMethod" class="input">
+              <option>Cash</option><option>GCash</option><option>Maya</option><option>Bank Transfer</option><option>Card</option><option>Check</option>
+            </select>
+          </div>
+          <div><p class="label">PAYMENT DATE</p><input type="date" id="pDate" class="input"></div>
+        </div>
+
+        <div class="two">
+          <div><p class="label">REFERENCE NO.</p><input type="text" id="pRef" class="input" placeholder="Optional"></div>
+          <div><p class="label">RECEIVED BY</p><input type="text" id="pStaff" class="input" value="Admin"></div>
+        </div>
+
+        <p class="label">NOTES</p>
+        <input type="text" id="pNotes" class="input" placeholder="Optional">
+
+        <p class="err" id="payErr"></p>
+        <div class="btns">
+          <button class="btn" id="cancelPay">Cancel</button>
+          <button class="btn btn-blue" id="savePay">Save payment</button>
+        </div>
+      </dialog>
+    </div>
+  </main>
+
+  <script src="/main/ui.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/main/data.js"></script>
+  <script src="/Payments/Payments.js"></script>
+</body>
+</html>

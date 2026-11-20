@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Repair / Job Orders - Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/main/main.css">
+  <link rel="stylesheet" href="/Joborder/Joborder.css">
+  <link rel="stylesheet" href="/Joborder/jobform.css">
+</head>
+
+<body>
+
+  <!-- ===== TOP NAVIGATION ===== -->
+  <header class="sidebar">
+    <a href="/Dashboard/Dashboard.html" class="logo" aria-label="Home">
+      <img src="/main/Logo.png" alt="Company logo">
+    </a>
+
+    <nav class="menu">
+      <a href="/Dashboard/Dashboard.html" class="menu-link">Dashboard</a>
+      <a href="/Joborder/Joborder.html" class="menu-link active">Job Order</a>
+      <a href="/Customers/Customers.html" class="menu-link">Customers</a>
+      <a href="/Inventory/Inventory.html" class="menu-link">Inventory</a>
+      <a href="/Payments/Payments.html" class="menu-link">Payments</a>
+      <a href="/Reports/Reports.html" class="menu-link">Reports</a>
+    </nav>
+
+    <div class="welcome-box">
+      <div>
+        <p class="small-text">Welcome,</p>
+        <p class="bold-text">Admin</p>
+      </div>
+      <div class="circle">AD</div>
+    </div>
+  </header>
+
+
+  <!-- ===== PAGE CONTENT ===== -->
+  <main class="content">
+
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Repair / Job Orders</h1>
+        <br>
+      </div>
+
+      <!-- Buttons -->
+      <div class="top-actions">
+        <button class="btn" onclick="exportCsv()">Export CSV</button>
+        <button class="btn btn-blue" onclick="openNewForm()">+ New Job Order</button>
+      </div>
+    </div>
+
+    <!-- ===== 5 STAT BOXES ===== -->
+    <div class="stats-row">
+      <div class="card stat-box">
+        <p class="small-text">Total job orders</p>
+        <p class="big-number" id="stat-total">0</p>
+      </div>
+      <div class="card stat-box">
+        <p class="small-text">Open repairs</p>
+        <p class="big-number" id="stat-open">0</p>
+      </div>
+      <div class="card stat-box stat-green">
+        <p class="small-text">Normal</p>
+        <p class="big-number" id="stat-normal">0</p>
+        <p class="small-text">0–3 days</p>
+      </div>
+      <div class="card stat-box stat-yellow">
+        <p class="small-text">Aging</p>
+        <p class="big-number" id="stat-aging">0</p>
+        <p class="small-text">4–7 days</p>
+      </div>
+      <div class="card stat-box stat-red">
+        <p class="small-text">Critical</p>
+        <p class="big-number" id="stat-critical">0</p>
+        <p class="small-text">8+ days</p>
+      </div>
+    </div>
+
+    <!-- ===== SEARCH + STATUS FILTER ===== -->
+    <div class="card filter-card">
+      <div class="grow">
+        <p class="form-label">Search</p>
+        <input type="text" id="search-input" class="input" placeholder="Job order, customer, device, model, serial / IMEI...">
+      </div>
+      <div>
+        <p class="form-label">Status</p>
+        <select id="status-filter" class="input"></select>
+      </div>
+      <button class="btn btn-dark" onclick="showJobs()">Search</button>
+    </div>
+
+    <p class="small-text count-text" id="count-text">Loading...</p>
+
+    <!-- ===== JOB ORDER TABLE ===== -->
+    <div class="card table-card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Job order</th>
+              <th>Customer</th>
+              <th>Device</th>
+              <th>Date received</th>
+              <th>Status</th>
+              <th>Status started</th>
+              <th>Aging</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="job-list"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+
+  <!-- ===== NEW JOB ORDER POPUP (same boxes as the paper form) ===== -->
+  <div class="overlay" id="new-overlay">
+    <div class="form-box form-wide">
+      <h2>New Job Order</h2>
+      <p class="small-text pf-note">The boxes below follow the printed Job Order Form. Your answers are put on the paper for you.</p>
+
+      <!-- JOB ORDER FORM -->
+      <div class="pf-title">JOB ORDER FORM</div>
+      <div class="pf-grid">
+        <div>
+          <p class="form-label">NAME</p>
+          <input type="text" id="new-customer" class="input" list="customer-names" placeholder="Type a name or pick an existing customer">
+          <datalist id="customer-names"></datalist>
+
+          <p class="form-label">ADDRESS</p>
+          <input type="text" id="new-address" class="input" placeholder="Street, barangay, city">
+
+          <p class="form-label">CONTACT NUMBER</p>
+          <input type="text" id="new-contact" class="input" placeholder="09123456789">
+        </div>
+        <div>
+          <p class="form-label">DATE</p>
+          <input type="text" id="new-date" class="input" readonly>
+
+          <p class="form-label">RECEIVED BY</p>
+          <input type="text" id="new-receivedby" class="input" placeholder="Staff name">
+        </div>
+      </div>
+
+      <!-- UNIT INFORMATION -->
+      <div class="pf-title">UNIT INFORMATION</div>
+      <div class="pf-grid">
+        <div>
+          <p class="form-label">MODEL NUMBER</p>
+          <input type="text" id="new-device" class="input" placeholder="iPhone 11">
+
+          <p class="form-label">SERIAL NUMBER / IMEI NO. (optional)</p>
+          <input type="text" id="new-serial" class="input">
+        </div>
+        <div>
+          <p class="form-label">ACCESSORIES RECEIVED</p>
+          <div class="pf-acc">
+            <label class="fck"><input type="checkbox" id="acc-charger"> Charger</label>
+            <label class="fck"><input type="checkbox" id="acc-bag"> Bag</label>
+            <label class="fck"><input type="checkbox" id="acc-other"> Other accs</label>
+          </div>
+
+          <p class="form-label">REMARKS</p>
+          <input type="text" id="new-remarks" class="input" placeholder="Optional">
+        </div>
+      </div>
+
+      <!-- JOB DESCRIPTION -->
+      <div class="pf-title">JOB DESCRIPTION</div>
+      <p class="form-label">SERVICE</p>
+      <select id="new-service" class="input"></select>
+
+      <p class="form-label">ISSUE / NOTES</p>
+      <textarea id="new-issue" class="input" rows="2" placeholder="What is wrong with the device?"></textarea>
+
+      <!-- INCOMING QUALITY CHECK -->
+      <div class="pf-title">INCOMING QUALITY CHECK</div>
+      <div id="new-incoming"></div>
+
+      <!-- Shop use (not printed on the paper) -->
+      <div class="pf-title">SHOP USE (not printed on the paper)</div>
+      <div class="pf-grid">
+        <div>
+          <p class="form-label">STATUS</p>
+          <select id="new-status" class="input"></select>
+        </div>
+        <div>
+          <p class="form-label">ESTIMATED COST (₱)</p>
+          <input type="number" id="new-amount" class="input" value="0" min="0">
+        </div>
+      </div>
+
+      <p id="form-error" class="form-error"></p>
+
+      <div class="form-buttons">
+        <button class="btn btn-paper" onclick="openPaperFromNew()">Preview paper form</button>
+        <button class="btn" onclick="closeNewForm()">Cancel</button>
+        <button class="btn btn-blue" onclick="saveJobOrder()">Save Job Order</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== VIEW / UPDATE STATUS POPUP ===== -->
+  <div class="overlay" id="view-overlay">
+    <div class="form-box form-wide">
+      <h2 id="view-title">Job Order</h2>
+      <div id="view-details"></div>
+
+      <p class="form-label">CHANGE STATUS</p>
+      <select id="view-status" class="input"></select>
+
+      <!-- Paper form: filled when the repair is done -->
+      <div class="pf-title">REPAIR REMARKS</div>
+      <textarea id="view-repair" class="input" rows="2" placeholder="What was done to the device?"></textarea>
+
+      <div class="pf-title">OUTGOING QUALITY CHECK</div>
+      <div id="view-outgoing"></div>
+
+      <div class="form-buttons">
+        <button class="btn btn-paper" onclick="openPaperFromView()">Paper form</button>
+        <button class="btn" onclick="closeView()">Close</button>
+        <button class="btn btn-blue" onclick="saveStatus()">Update Status</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="/main/ui.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/main/data.js"></script>
+  <script src="/Joborder/Joborder.js"></script>
+  <script src="/Joborder/jobform.js"></script>
+
+</body>
+</html>

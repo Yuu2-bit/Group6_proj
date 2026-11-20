@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard - Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/main/main.css">
+  <link rel="stylesheet" href="/Dashboard/Dashboard.css">
+</head>
+
+<body>
+
+  <!-- ===== TOP NAVIGATION ===== -->
+  <header class="sidebar">
+    <a href="/Dashboard/Dashboard.html" class="logo" aria-label="Home">
+      <img src="/main/Logo.png" alt="Company logo">
+    </a>
+
+    <nav class="menu">
+      <a href="/Dashboard/Dashboard.html" class="menu-link active">Dashboard</a>
+      <a href="/Joborder/Joborder.html" class="menu-link">Job Order</a>
+      <a href="/Customers/Customers.html" class="menu-link">Customers</a>
+      <a href="/Inventory/Inventory.html" class="menu-link">Inventory</a> 
+      <a href="/Payments/Payments.html" class="menu-link">Payments</a>
+      <a href="/Reports/Reports.html" class="menu-link">Reports</a>
+    </nav>
+
+    <div class="welcome-box">
+      <div>
+        <p class="small-text">Welcome,</p>
+        <p class="bold-text">Admin</p>
+      </div>
+      <div class="circle">AD</div>
+    </div>
+  </header>
+
+
+  <!-- ===== PAGE CONTENT ===== -->
+  <main class="content">
+
+    <h1 class="page-title">Dashboard</h1>
+    <br>
+
+    <!-- ===== 4 STAT BOXES (Dashboard.js fills in the numbers) ===== -->
+    <div class="stats-row">
+
+      <div class="card stat-box">
+        <p class="small-text">Total bookings</p>
+        <p class="big-number" id="stat-bookings">0</p>
+        <p class="up-text" id="stat-bookings-note"></p>
+      </div>
+
+      <div class="card stat-box">
+        <p class="small-text">Pending repairs</p>
+        <p class="big-number" id="stat-pending">0</p>
+        <p class="orange-text" id="stat-pending-note"></p>
+      </div>
+
+      <div class="card stat-box">
+        <p class="small-text">Customers</p>
+        <p class="big-number" id="stat-customers">0</p>
+        <p class="up-text" id="stat-customers-note"></p>
+      </div>
+
+      <div class="card stat-box">
+        <p class="small-text">Revenue</p>
+        <p class="big-number" id="stat-revenue">₱0</p>
+        <p class="up-text">From released repairs</p>
+      </div>
+
+    </div>
+
+
+    <!-- ===== TABLE + POPULAR SERVICES ===== -->
+    <div class="two-columns">
+
+      <div class="card table-card">
+        <h2>Recent bookings</h2>
+        <p class="small-text">The latest repair requests from customers</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Service</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recent-list"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card services-card">
+        <h2>Popular services</h2>
+        <p class="small-text">Share of all job orders</p>
+        <div id="services-list"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/main/ui.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/main/data.js"></script>
+  <script src="/Dashboard/Dashboard.js"></script>
+
+</body>
+</html>

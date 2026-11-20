@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Customers - Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/main/main.css">
+  <link rel="stylesheet" href="/Customers/Customers.css">
+</head>
+
+<body>
+
+  <!-- ===== TOP NAVIGATION ===== -->
+  <header class="sidebar">
+    <a href="/Dashboard/Dashboard.html" class="logo" aria-label="Home">
+     <img src="/main/Logo.png" alt="Company logo">
+    </a>
+
+    <nav class="menu">
+      <a href="/Dashboard/Dashboard.html" class="menu-link">Dashboard</a>
+      <a href="/Joborder/Joborder.html" class="menu-link">Job Order</a>
+      <a href="/Customers/Customers.html" class="menu-link active">Customers</a>
+      <a href="/Inventory/Inventory.html" class="menu-link">Inventory</a>
+      <a href="/Payments/Payments.html" class="menu-link">Payments</a>
+      <a href="/Reports/Reports.html" class="menu-link">Reports</a>
+    </nav>
+
+    <div class="welcome-box">
+      <div>
+        <p class="small-text">Welcome,</p>
+        <p class="bold-text">Admin</p>
+      </div>
+      <div class="circle">AD</div>
+    </div>
+  </header>
+
+
+  <!-- ===== PAGE CONTENT ===== -->
+  <main class="content">
+
+    <h1 class="page-title">Customers</h1>
+    <br>
+
+    <!-- Search -->
+    <div class="search-row">
+      <div class="search-box">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="6"/><path d="M14 14l4 4"/></svg>
+        <input type="text" id="search-input" class="input" placeholder="Search customer ID, name, company, or number" onkeydown="if (event.key === 'Enter') { showCustomers(); }">
+      </div>
+      <button class="btn" onclick="showCustomers()">Search</button>
+    </div>
+
+    <!-- Customer table -->
+    <div class="card table-card">
+      <div class="card-head">
+        <h2>Customer Master</h2>
+        <p class="small-text" id="count-text">Loading...</p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Customer ID</th>
+              <th>Customer</th>
+              <th>Contact</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="customer-list"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="/main/ui.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/main/data.js"></script>
+  <script src="/Customers/Customers.js"></script>
+
+</body>
+</html>

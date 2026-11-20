@@ -1,0 +1,88 @@
+/* ===== Reports.css ===== */
+/* Your main.css already styles the buttons, inputs and labels. */
+
+.rep {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rep-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* A white card with a thin border */
+.rep-box {
+  background: #FFFDFA;
+  border: 1px solid #E8DFD0;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.rep-title {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+/* A row of buttons or boxes */
+.rep-row {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.rep-row .input {
+  width: 180px;
+}
+
+/* the filter button that is selected */
+.rep-row .btn.on {
+  background: #2A1D14;
+  color: #FFFFFF;
+}
+
+/* ----- 4 number boxes ----- */
+.rep-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.rep-stats strong {
+  display: block;
+  font-size: 26px;
+  margin: 6px 0;
+}
+
+/* ----- 2 big boxes side by side ----- */
+.rep-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+/* one line in a list: name on the left, number on the right */
+.rep-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #F0E8DA;
+  font-size: 14px;
+}
+
+.rep-line b {
+  font-weight: 600;
+}
+
+/* On small screens */
+@media (max-width: 800px) {
+  .rep-stats { grid-template-columns: 1fr 1fr; }
+  .rep-two { grid-template-columns: 1fr; }
+}

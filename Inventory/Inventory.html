@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inventory - Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/main/main.css">
+  <link rel="stylesheet" href="/Inventory/Inventory.css">
+</head>
+
+<body>
+
+  <!-- ===== TOP NAVIGATION ===== -->
+  <header class="sidebar">
+    <a href="/Dashboard/Dashboard.html" class="logo" aria-label="Home">
+      <img src="/main/Logo.png" alt="Company logo">
+    </a>
+
+    <nav class="menu">
+      <a href="/Dashboard/Dashboard.html" class="menu-link">Dashboard</a>
+      <a href="/Joborder/Joborder.html" class="menu-link">Job Order</a>
+      <a href="/Customers/Customers.html" class="menu-link">Customers</a>
+      <a href="/Inventory/Inventory.html" class="menu-link active">Inventory</a>
+      <a href="/Payments/Payments.html" class="menu-link">Payments</a>
+      <a href="/Reports/Reports.html" class="menu-link">Reports</a>
+    </nav>
+
+    <div class="welcome-box">
+      <div>
+        <p class="small-text">Welcome,</p>
+        <p class="bold-text">Admin</p>
+      </div>
+      <div class="circle">AD</div>
+    </div>
+  </header>
+
+
+  <!-- ===== PAGE CONTENT ===== -->
+  <main class="content">
+    <div class="inv">
+
+      <div class="inv-head">
+        <div>
+          <h1 class="page-title">Inventory</h1>
+          <br>
+        </div>
+        <div class="head-buttons">
+          <button class="btn" id="addBtn">+ Add inventory item</button>
+          <button class="btn btn-green" id="inBtn">+ Stock in</button>
+          <button class="btn btn-dark" id="outBtn">− Stock out</button>
+        </div>
+      </div>
+
+      <!-- ===== 5 STAT BOXES (click In stock / Low stock / Out of stock to filter) ===== -->
+      <div class="stats-row">
+        <div class="card stat-box" data-stock="all" role="button" tabindex="0">
+          <p class="small-text">Total items</p>
+          <p class="big-number" id="invTotal">0</p>
+        </div>
+        <div class="card stat-box">
+          <p class="small-text">Active items</p>
+          <p class="big-number" id="invActive">0</p>
+        </div>
+        <div class="card stat-box stat-green" data-stock="in" role="button" tabindex="0">
+          <p class="small-text">In stock</p>
+          <p class="big-number" id="invIn">0</p>
+        </div>
+        <div class="card stat-box stat-yellow" data-stock="low" role="button" tabindex="0">
+          <p class="small-text">Low stock</p>
+          <p class="big-number" id="invLow">0</p>
+        </div>
+        <div class="card stat-box stat-red" data-stock="out" role="button" tabindex="0">
+          <p class="small-text">Out of stock</p>
+          <p class="big-number" id="invOut">0</p>
+        </div>
+      </div>
+
+      <!-- ===== SEARCH + FILTERS ===== -->
+      <div class="card inv-filters">
+        <input type="text" id="searchInput" class="input" placeholder="Search SKU, category, brand, or description...">
+        <select id="fCategory" class="input"></select>
+        <select id="fBrand" class="input"></select>
+        <select id="fStock" class="input">
+          <option value="all">All Stock</option>
+          <option value="in">In Stock</option>
+          <option value="low">Low Stock</option>
+          <option value="out">Out of Stock</option>
+        </select>
+        <button class="btn btn-dark" id="searchBtn">Search</button>
+      </div>
+
+      <p class="db-note" id="dbNote" hidden>Selling price and stock history are not set up in your database yet. Run <b>inventory_upgrade.sql</b> in Supabase to turn them on.</p>
+
+      <!-- ===== INVENTORY TABLE (JavaScript builds the rows) ===== -->
+      <div class="card table-card">
+        <div class="card-head">
+          <h2>Inventory Items</h2>
+          <p class="small-text" id="countText"></p>
+        </div>
+        <div class="table-wrap">
+          <table class="inv-table">
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>Brand</th>
+                <th>Description</th>
+                <th>Supplier</th>
+                <th class="num">Stock</th>
+                <th class="num">Reorder</th>
+                <th class="num">Unit cost</th>
+                <th class="num">Selling price</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="itemRows"></tbody>
+          </table>
+        </div>
+        <div class="more-row"><button class="btn" id="moreBtn" hidden>Show more</button></div>
+      </div>
+
+
+      <!-- ===== Add / edit item popup ===== -->
+      <dialog id="itemDlg">
+        <div class="dh">
+          <div>
+            <p class="eyebrow">INVENTORY ITEM</p>
+            <h2 id="itemTitle">Add Inventory Item</h2>
+          </div>
+          <button class="x" id="xItem" aria-label="Close">×</button>
+        </div>
+        <p class="small-text">Stock quantity is controlled by Stock in and Stock out. It is not edited here.</p>
+
+        <div class="two">
+          <div>
+            <p class="label">SKU</p>
+            <input type="text" id="iSku" class="input" placeholder="Example: BAT-IP-001">
+          </div>
+          <div>
+            <p class="label">CATEGORY</p>
+            <input type="text" id="iCategory" class="input" list="catList" placeholder="Example: BATTERY">
+            <datalist id="catList"></datalist>
+          </div>
+        </div>
+
+        <div class="two">
+          <div>
+            <p class="label">BRAND</p>
+            <input type="text" id="iBrand" class="input" list="brandList" placeholder="Example: GENERIC">
+            <datalist id="brandList"></datalist>
+          </div>
+          <div>
+            <p class="label">SUPPLIER</p>
+            <input type="text" id="iSupplier" class="input" placeholder="Supplier name">
+          </div>
+        </div>
+
+        <p class="label">DESCRIPTION</p>
+        <textarea id="iDesc" class="input" rows="2" placeholder="Detailed part description..."></textarea>
+
+        <div class="two three">
+          <div>
+            <p class="label">UNIT COST (₱)</p>
+            <input type="number" id="iCost" class="input" min="0" step="0.01" value="0">
+          </div>
+          <div>
+            <p class="label">SELLING PRICE (₱)</p>
+            <input type="number" id="iPrice" class="input" min="0" step="0.01" value="0">
+          </div>
+          <div>
+            <p class="label">REORDER LEVEL</p>
+            <input type="number" id="iReorder" class="input" min="0" value="0">
+          </div>
+        </div>
+
+        <p class="err" id="itemErr"></p>
+        <div class="btns">
+          <button class="btn" id="cancelItem">Cancel</button>
+          <button class="btn btn-blue" id="saveItem">Save item</button>
+        </div>
+      </dialog>
+
+      <!-- ===== Stock in / stock out popup ===== -->
+      <dialog id="moveDlg">
+        <div class="dh">
+          <div>
+            <p class="eyebrow">INVENTORY TRANSACTION</p>
+            <h2 id="moveTitle">Stock In</h2>
+          </div>
+          <button class="x" id="xMove" aria-label="Close">×</button>
+        </div>
+        <p class="small-text" id="moveSub"></p>
+
+        <p class="label">SEARCH INVENTORY ITEM</p>
+        <input type="text" id="mSearch" class="input" placeholder="Search SKU, part name, device model, description or brand...">
+        <p class="hint">Type to filter inventory items. Then select the correct part below.</p>
+
+        <p class="label">INVENTORY ITEM</p>
+        <select id="mItem" class="input"></select>
+
+        <div class="tiles">
+          <div class="tile">
+            <p class="tile-label">AVAILABLE STOCK</p>
+            <p class="tile-value" id="mAvail">Select a part above</p>
+          </div>
+          <div class="tile">
+            <p class="tile-label" id="lblType">TRANSACTION</p>
+            <p class="tile-value" id="mType">Manual Stock In</p>
+          </div>
+        </div>
+
+        <div class="two">
+          <div>
+            <p class="label" id="lblQty">QUANTITY *</p>
+            <input type="number" id="mQty" class="input" min="1" placeholder="0">
+          </div>
+          <div>
+            <p class="label">UNIT COST</p>
+            <input type="number" id="mCost" class="input" min="0" step="0.01" placeholder="Optional">
+            <p class="hint">Leave blank if you don't want to record the cost.</p>
+          </div>
+        </div>
+
+        <p class="label">TRANSACTION TYPE *</p>
+        <select id="mTrans" class="input"></select>
+
+        <p class="label">REFERENCE NO. (OPTIONAL)</p>
+        <input type="text" id="mRef" class="input" placeholder="JO, invoice, receipt, etc.">
+
+        <p class="label">REASON / REMARKS (OPTIONAL)</p>
+        <textarea id="mRemarks" class="input" rows="2" placeholder="Additional details..."></textarea>
+
+        <p class="label" id="lblStaff">STAFF *</p>
+        <select id="mStaff" class="input"></select>
+
+        <div class="processed">
+          <p class="tile-label">PROCESSED BY</p>
+          <p class="tile-value" id="mBy">Admin</p>
+          <p class="hint">Automatically recorded from the signed-in account.</p>
+        </div>
+
+        <p class="err" id="moveErr"></p>
+        <div class="btns">
+          <button class="btn" id="cancelMove">Cancel</button>
+          <button class="btn btn-green" id="saveMove">Receive Stock</button>
+        </div>
+      </dialog>
+
+    </div>
+  </main>
+
+  <script src="/main/ui.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/main/data.js"></script>
+  <script src="/Inventory/Inventory.js"></script>
+</body>
+</html>

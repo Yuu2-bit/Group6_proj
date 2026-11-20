@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login - Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/main/main.css">
+  <link rel="stylesheet" href="/Login/login.css">
+</head>
+
+<body>
+
+  <div class="login-box">
+    <div class="logo">
+      <img src="main/Logo.png" alt="Logo">
+    </div>
+    <h1>Welcome back</h1>
+    <p class="subtitle">Sign in to manage your repair shop</p>
+
+   
+    <p class="label">USERNAME</p>
+    <input type="text" id="username" class="input" placeholder="Enter your username">
+
+    <p class="label">PASSWORD</p>
+    <input type="password" id="password" class="input" placeholder="Enter your password">
+
+    <p id="error-message" class="error"></p>
+
+    <div class="remember-row">
+      <input type="checkbox" id="remember">
+      <label for="remember">Remember me</label>
+    </div>
+
+    <button class="login-button" onclick="login()">Sign In</button>
+
+  </div>
+
+  <script src="/Login/Login.js"></script>
+
+</body>
+</html>

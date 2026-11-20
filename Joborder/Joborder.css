@@ -1,0 +1,151 @@
+/* ===== Joborder.css =====
+   Only what is specific to the Job Order page.
+   Colors, nav, cards, stat boxes, tables, badges and inputs come from /main/main.css. */
+
+/* ----- Page header + buttons ----- */
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.page-head .description { margin: 10px 0 0; max-width: 620px; }
+.top-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* buttons on this page: outline by default, dark for the main actions */
+.btn {
+  padding: 9px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+}
+.btn:hover { background: #f2e8da; }
+.btn-blue, .btn-dark { background: var(--text); border-color: var(--text); color: var(--bg); }
+.btn-blue:hover, .btn-dark:hover { background: #4a3426; }
+
+
+/* ----- 5 stat boxes ----- */
+.stats-row { grid-template-columns: repeat(5, 1fr); margin-bottom: 20px; }
+
+.stat-green { background: #f3fbf7; border-color: #cfeadd; --tone: var(--accent); --tone-soft: #d9f2e6; }
+.stat-green .big-number { color: var(--accent); }
+.stat-yellow { background: #fff9ee; border-color: #f3e1bd; --tone: var(--warn); --tone-soft: #fbebc9; }
+.stat-yellow .big-number { color: var(--warn); }
+.stat-red { background: #fdf3f2; border-color: #f3cdc9; --tone: #c0392b; --tone-soft: #f8d9d6; }
+.stat-red .big-number { color: #c0392b; }
+
+@media (max-width: 1100px) { .stats-row { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 760px)  { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+
+
+/* ----- Search + status filter ----- */
+.filter-card {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+}
+.filter-card .grow { flex: 1; min-width: 240px; }
+.filter-card > div:not(.grow) { width: 200px; }
+.filter-card .input { width: 100%; }
+.filter-card .btn { padding: 10px 22px; }
+
+.form-label { font-size: 12.5px; font-weight: 500; color: var(--muted); margin-bottom: 6px; }
+.count-text { margin: 0 2px 12px; }
+
+
+/* ----- Job order table ----- */
+.table-card { padding: 0; overflow: hidden; }
+.table-card .table-wrap { margin-top: 0; }
+
+.table-card th, .table-card td { padding-left: 24px; }
+.table-card th:last-child, .table-card td:last-child { padding-right: 24px; text-align: right; }
+.table-card th { background: #f8f1e6; padding-top: 12px; padding-bottom: 12px; }
+
+#job-list tr { transition: background 0.12s; }
+#job-list tr:hover { background: #f8f1e6; }
+#job-list tr:last-child td { border-bottom: 0; }
+
+#job-list td:first-child { font-weight: 500; font-family: var(--mono); font-size: 13px; }
+#job-list td:nth-child(4),
+#job-list td:nth-child(6) { color: var(--muted); }
+
+#job-list td[colspan] { text-align: center; color: var(--muted); padding: 40px 24px; }
+
+/* row buttons (View, Update...) */
+#job-list td button,
+#job-list td .btn,
+#job-list td a {
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+#job-list td button:hover,
+#job-list td .btn:hover,
+#job-list td a:hover { background: #f2e8da; border-color: #d9c9b4; }
+
+
+/* ----- Popups (New Job Order, View / Update Status) ----- */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(43, 29, 20, 0.4);
+  backdrop-filter: blur(3px);
+}
+/* shown when the script adds a class or sets display on it */
+.overlay.show, .overlay.open, .overlay.active, .overlay.visible { display: flex; }
+.overlay[style*="block"] { display: flex !important; }
+
+.form-box {
+  width: min(520px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 26px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(43, 29, 20, 0.18);
+}
+.form-box h2 { font-size: 20px; margin-bottom: 4px; }
+.form-box .form-label { margin-top: 16px; }
+.form-box .input { width: 100%; }
+.form-box textarea.input { resize: vertical; font-family: inherit; }
+
+#view-details {
+  margin-top: 12px;
+  padding: 14px 16px;
+  background: #f8f1e6;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  line-height: 1.7;
+}
+#view-details:empty { display: none; }
+
+.form-error { margin-top: 12px; font-size: 13px; color: #c0392b; }
+.form-error:empty { display: none; }
+
+.form-buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 22px; }
+
+
+/* ----- Small screens ----- */
+@media (max-width: 760px) {
+  .filter-card > div:not(.grow) { width: 100%; }
+  .filter-card .btn { width: 100%; }
+}

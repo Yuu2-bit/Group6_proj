@@ -1,0 +1,35 @@
+/* ===== Dashboard.css =====
+   Only what is specific to the Dashboard page.
+   Colors, nav, cards, tables and badges come from /main/main.css. */
+
+/* ----- Table + popular services ----- */
+.two-columns {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 16px;
+}
+
+.services-card { padding: 24px; }
+.table-card .small-text, .services-card .small-text { margin-top: 2px; }
+
+
+/* ----- Popular services bars ----- */
+#services-list { margin-top: 20px; display: grid; gap: 18px; }
+
+.service-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 7px;
+}
+.service-top span:first-child { font-weight: 500; }
+.service-top span:last-child { color: var(--muted); }
+
+.bar-back { height: 6px; border-radius: 999px; background: #efe4d3; overflow: hidden; }
+.bar-fill { height: 100%; background: linear-gradient(90deg, var(--brand), #d99a5b); border-radius: 999px; }
+
+
+/* ----- Responsive ----- */
+@media (max-width: 1100px) {
+  .two-columns { grid-template-columns: 1fr; }
+}
