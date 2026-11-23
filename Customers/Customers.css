@@ -2,19 +2,28 @@
    Only what is specific to the Customers page.
    Colors, nav, cards, tables, badges and buttons come from /main/main.css. */
 
-.description { max-width: 640px; }
+.description {
+  max-width: 640px;
+}
 
 
 /* ----- Search bar ----- */
-.search-row { max-width: 720px; margin-bottom: 20px; }
+.search-row {
+  max-width: 720px;
+  margin-bottom: 20px;
+}
 
-.search-box { position: relative; flex: 1; min-width: 0; }
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
 
 .search-box svg {
   position: absolute;
   left: 14px;
   top: 50%;
-  transform: translateY(-50%);
+  margin-top: -8px;
   width: 16px;
   height: 16px;
   color: var(--muted);
@@ -24,45 +33,66 @@
 .search-box .input {
   width: 100%;
   padding: 11px 14px 11px 40px;
-  border-radius: 12px;
+  border-radius: 8px;
 }
 
-.search-row .btn { border-radius: 12px; padding: 0 22px; }
+.search-row .btn {
+  border-radius: 8px;
+  padding: 0 22px;
+}
 
 
 /* ----- Customer card ----- */
-.table-card { padding: 0; overflow: hidden; }
+.table-card {
+  padding: 0;
+  overflow: hidden;
+}
 
 .card-head {
-  padding: 22px 24px 18px;
+  padding: 22px 24px 18px 24px;
   border-bottom: 1px solid var(--line);
 }
 
-.table-card .table-wrap { margin-top: 0; }
+.table-card .table-wrap {
+  margin-top: 0;
+}
 
-.table-card th, .table-card td { padding-left: 24px; }
-.table-card th:last-child, .table-card td:last-child { padding-right: 24px; text-align: right; }
+.table-card th,
+.table-card td {
+  padding-left: 24px;
+}
+
+.table-card th:last-child,
+.table-card td:last-child {
+  padding-right: 24px;
+  text-align: right;
+}
 
 .table-card th {
-  background: #f8f1e6;
+  background: var(--surface-2);
   padding-top: 12px;
   padding-bottom: 12px;
 }
 
-#customer-list tr { transition: background 0.12s; }
-#customer-list tr:hover { background: #f8f1e6; }
-#customer-list tr:last-child td { border-bottom: 0; }
+#customer-list tr:hover {
+  background: var(--surface-2);
+}
 
 /* column looks: ID, then name, then the rest */
 #customer-list td:first-child {
   color: var(--muted);
   font-size: 13px;
-  font-variant-numeric: tabular-nums;
-  font-family: var(--mono);
+  font-family: monospace;
 }
-#customer-list td:nth-child(2) { font-weight: 500; }
+
+#customer-list td:nth-child(2) {
+  font-weight: 500;
+}
+
 #customer-list td:nth-child(3),
-#customer-list td:nth-child(4) { color: var(--muted); }
+#customer-list td:nth-child(4) {
+  color: var(--muted);
+}
 
 /* "No customers found" / loading row */
 #customer-list td[colspan] {
@@ -85,19 +115,27 @@
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
 }
+
 #customer-list td button:hover,
 #customer-list td .btn:hover,
 #customer-list td a:hover {
-  background: #f2e8da;
-  border-color: #d9c9b4;
+  background: var(--surface-3);
+  border-color: var(--line-strong);
 }
 
 
 /* ----- Small screens ----- */
 @media (max-width: 760px) {
-  .search-row { flex-direction: column; }
-  .search-row .btn { padding: 11px 22px; }
-  .card-head { padding: 18px 20px 14px; }
+  .search-row {
+    flex-direction: column;
+  }
+
+  .search-row .btn {
+    padding: 11px 22px;
+  }
+
+  .card-head {
+    padding: 18px 20px 14px 20px;
+  }
 }

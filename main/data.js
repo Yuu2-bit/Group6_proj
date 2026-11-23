@@ -1,9 +1,12 @@
 // ===== data.js =====
 // ONE shared file used by every page (Main, Dashboard, Job Order, Customers, Inventory).
-// Save it as /main/data.js and paste your Supabase details below.
+// Save it as /main/data.js
+// Every page must load the Supabase library BEFORE this file:
+// <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+// <script src="/main/data.js"></script>
 
-var SUPABASE_URL = "https://kddmnwmhaghpywpekufa.supabase.co";   // from your old Inventory.html - change it if this is not your project
-var SUPABASE_KEY = "";      // paste your "anon public" key here (Supabase > Project Settings > API)
+var SUPABASE_URL = "https://qdqljodxhvxllldqzhof.supabase.co";
+var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkcWxqb2R4aHZ4bGxsZHF6aG9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzNzEwNjgsImV4cCI6MjExMDk0NzA2OH0.F4yoASDJ-UidPTTxWnSSlkecEpw9Dmni2CYPKpLhyfg";
 
 // Connect to the database. If something is wrong, the rest of this file still
 // loads (so the drop-down lists work) and a message is shown on the page.
@@ -31,8 +34,8 @@ function showDemoNotice() {
   bar.id = "db-notice";
   bar.textContent = "Not connected to the database. " + dbError;
   bar.style.cssText = "position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:200;max-width:90vw;" +
-    "padding:10px 16px;border-radius:12px;background:#2b1d14;color:#faf5ee;font:500 13px Inter,Arial,sans-serif;" +
-    "box-shadow:0 10px 30px rgba(0,0,0,.25);text-align:center;";
+    "padding:10px 16px;border-radius:8px;border:1px solid #2f4268;background:#1a2842;color:#e8eef9;" +
+    "font:500 13px Inter,Arial,sans-serif;text-align:center;";
   document.body.appendChild(bar);
 }
 window.addEventListener("DOMContentLoaded", showDemoNotice);

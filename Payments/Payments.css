@@ -1,5 +1,6 @@
-/* ===== Payments.css ===== */
-/* Your main.css already styles the buttons, inputs, labels and popups. */
+/* ===== Payments.css =====
+   Only what is specific to the Payments page.
+   Colors, buttons, inputs and fonts come from /main/main.css. */
 
 
 /* The whole page: boxes stacked with a space between them */
@@ -18,11 +19,11 @@
   gap: 12px;
 }
 
-/* A white card with a thin border (used by every section) */
+/* A box with a thin border (used by every section) */
 .pay-box {
-  background: #FFFDFA;
-  border: 1px solid #E8DFD0;
-  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
   padding: 16px;
 }
 
@@ -39,11 +40,15 @@
   width: 180px;
 }
 
+#payDate {
+  width: 180px;
+}
+
 
 /* ----- The 4 number boxes ----- */
 .pay-stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);   /* 4 equal columns */
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 12px;
 }
 
@@ -68,7 +73,7 @@
 }
 
 .pay-scroll {
-  overflow-x: auto;       /* the table can scroll sideways on a phone */
+  overflow-x: auto;
   margin-top: 12px;
 }
 
@@ -81,14 +86,14 @@
 .pay-table th {
   text-align: left;
   font-size: 12px;
-  color: #7A6A5A;
+  color: var(--muted);
   padding: 8px;
-  border-bottom: 1px solid #E8DFD0;
+  border-bottom: 1px solid var(--line);
 }
 
 .pay-table td {
   padding: 10px 8px;
-  border-bottom: 1px solid #F0E8DA;
+  border-bottom: 1px solid var(--line);
 }
 
 /* the Amount column sits on the right */
@@ -100,38 +105,25 @@
 .pay-empty {
   text-align: center;
   padding: 40px;
-  color: #7A6A5A;
-}
-
-
-/* ----- Make the date box a normal size ----- */
-#payDate {
-  width: 180px;
+  color: var(--muted);
 }
 
 
 /* ----- The Record Payment popup ----- */
-/* (your Inventory popup styles live in Inventory.css, so this page needs its own) */
-
 dialog {
-  margin: auto;                 /* puts the popup in the middle of the screen */
+  margin: auto;
   width: 480px;
   max-width: 92vw;
   padding: 22px;
-  border: 1px solid #E8DFD0;
-  border-radius: 16px;
-  background: #FFFDFA;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-}
-
-/* hidden until the code opens it */
-dialog:not([open]) {
-  display: none;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
 }
 
 /* the dark shadow behind the popup */
 dialog::backdrop {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 /* title on the left, X button on the right */
@@ -150,20 +142,24 @@ dialog .dh h2 {
 dialog .x {
   border: none;
   background: none;
+  color: var(--muted);
   font-size: 26px;
   cursor: pointer;
 }
 
+dialog .x:hover {
+  color: var(--text);
+}
+
 /* small gray text above each box */
 dialog .label {
-  margin: 12px 0 4px;
+  margin: 12px 0 4px 0;
   font-size: 12px;
-  color: #7A6A5A;
+  color: var(--muted);
 }
 
 dialog .input {
   width: 100%;
-  box-sizing: border-box;
 }
 
 /* boxes side by side */
@@ -178,7 +174,7 @@ dialog .two > div {
 
 /* red error message */
 dialog .err {
-  color: #DC2626;
+  color: var(--danger);
   font-size: 13px;
   min-height: 18px;
 }
@@ -189,4 +185,58 @@ dialog .btns {
   justify-content: flex-end;
   gap: 8px;
   margin-top: 8px;
+}
+
+
+/* ----- Fix: Cancel and Save buttons (no red bar behind them) ----- */
+dialog .btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+dialog .btns button {
+  padding: 9px 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+dialog .btns button:hover {
+  background: var(--surface-2);
+  border-color: var(--line-strong);
+}
+
+dialog .btns button:last-child {
+  background: var(--red);
+  border-color: var(--red);
+  color: #ffffff;
+}
+
+dialog .btns button:last-child:hover {
+  background: var(--red-hover);
+  border-color: var(--red-hover);
+}
+
+.btns {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--red);
+  background: var(--red);
+  color: #fff;
+  font: inherit;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-left: 5px;
 }

@@ -2,9 +2,8 @@
 // Small interface touches shared by the app pages.
 // (The only login-related code is the "CONNECT TO YOUR LOGIN" block near the bottom.)
 //   0) the nav link of the page you are on is highlighted automatically
-//   1) the floating nav gets a stronger shadow once you scroll
-//   2) the big stat numbers count up when new values arrive
-//   3) click the picture in the nav to edit the display name, change the password or log out
+//   1) the big stat numbers count up when new values arrive
+//   2) click the picture in the nav to edit the display name, change the password or log out
 (function () {
 
   // ----- 0) Highlight the nav link that matches this page -----
@@ -27,16 +26,7 @@
   })();
 
 
-  // ----- 1) Nav island: add .scrolled after the page moves a little -----
-  var nav = document.querySelector(".sidebar");
-  function onScroll() {
-    if (nav) { nav.classList.toggle("scrolled", window.scrollY > 8); }
-  }
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-
-
-  // ----- 2) Count-up for .big-number ----------------------------------
+  // ----- 1) Count-up for .big-number ----------------------------------
   // Dashboard.js writes the numbers; this just animates the change.
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -99,7 +89,7 @@
 })();
 
 
-// ===== 3) Account menu: click the picture in the navigation ============
+// ===== 2) Account menu: click the picture in the navigation ============
 (function () {
 
   var box = document.querySelector(".welcome-box");
@@ -123,7 +113,7 @@
       }
       for (var j = 0; j < remove.length; j++) { localStorage.removeItem(remove[j]); }
     } catch (e) { /* storage is off, that is ok */ }
-    location.href = LOGIN_PAGE;
+    window.location.href = LOGIN_PAGE;
   }
 
   // Change password: return an error message, or null when it worked.

@@ -2,22 +2,33 @@
    The paper-form boxes inside the popups, the preview window and the
    printed "Job Order Form" paper (it has its own black-and-white colors on purpose). */
 
+
 /* ----- Buttons in the popups ----- */
-.form-buttons { flex-wrap: wrap; }
-.form-buttons .btn-paper { margin-right: auto; }
+.form-buttons {
+  flex-wrap: wrap;
+}
+
+.form-buttons .btn-paper {
+  margin-right: auto;
+}
 
 
 /* ----- Preview window (view only) ----- */
 .paper-overlay {
   display: none;
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 100;
   flex-direction: column;
-  background: rgba(43, 29, 20, 0.6);
-  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.6);
 }
-.paper-overlay.show { display: flex; }
+
+.paper-overlay.show {
+  display: flex;
+}
 
 .paper-bar {
   display: flex;
@@ -28,12 +39,30 @@
   background: var(--surface);
   border-bottom: 1px solid var(--line);
 }
-.paper-bar h2 { font-size: 17px; }
-.paper-bar .small-text { margin-right: auto; margin-left: 8px; }
 
-.paper-scroll { flex: 1; overflow: auto; padding: 20px 12px 48px; }
-.paper-fit { margin: 0 auto; }
-.paper-scale { width: 794px; transform-origin: 0 0; }
+.paper-bar h2 {
+  font-size: 17px;
+}
+
+.paper-bar .small-text {
+  margin-right: auto;
+  margin-left: 8px;
+}
+
+.paper-scroll {
+  flex: 1;
+  overflow: auto;
+  padding: 20px 12px 48px 12px;
+}
+
+.paper-fit {
+  margin: 0 auto;
+}
+
+.paper-scale {
+  width: 794px;
+  transform-origin: 0 0;
+}
 
 
 /* ===== The paper itself ===== */
@@ -41,43 +70,91 @@
   position: relative;
   width: 794px;
   min-height: 1122px;
-  padding: 26px 30px 24px;
-  background: #fff;
-  color: #111;
-  font-family: "Inter", Arial, Helvetica, sans-serif;
+  padding: 26px 30px 24px 30px;
+  background: #ffffff;
+  color: #111111;
+  font-family: "Inter", Arial, sans-serif;
   font-size: 10px;
   line-height: 1.3;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+
+  /* makes the colored boxes show when you print */
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
-.paper * { box-sizing: border-box; }
 
-.pp-no { position: absolute; top: 26px; right: 38px; color: #d9363e; font-weight: 600; font-size: 12px; }
+.paper * {
+  box-sizing: border-box;
+}
 
-.pp-head { position: relative; text-align: center; margin-bottom: 8px; padding: 6px 0 2px; }
-.pp-head img { position: absolute; left: 14px; top: 2px; height: 56px; width: 56px; object-fit: cover; border-radius: 50%; }
-.pp-shop { font-weight: 700; font-size: 13px; letter-spacing: 0.3px; }
-.pp-sub { font-size: 9.5px; font-weight: 600; }
+.pp-no {
+  position: absolute;
+  top: 26px;
+  right: 38px;
+  color: #d9363e;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.pp-head {
+  position: relative;
+  text-align: center;
+  margin-bottom: 8px;
+  padding: 6px 0 2px 0;
+}
+
+.pp-head img {
+  position: absolute;
+  left: 14px;
+  top: 2px;
+  height: 56px;
+  width: 56px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.pp-shop {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.pp-sub {
+  font-size: 9.5px;
+  font-weight: 600;
+}
 
 .pp-bar {
   margin-top: 8px;
-  border: 2px solid #111;
+  border: 2px solid #111111;
   text-align: center;
   font-weight: 700;
   font-size: 10.5px;
   padding: 1px 0;
 }
+
 .pp-box {
   display: flex;
   justify-content: space-between;
   gap: 24px;
   margin-top: 5px;
-  padding: 5px 8px 7px;
-  border: 2px solid #111;
+  padding: 5px 8px 7px 8px;
+  border: 2px solid #111111;
 }
-.pp-col { flex: 1; min-width: 0; }
-.pp-row { display: flex; align-items: flex-end; gap: 6px; margin-top: 5px; font-weight: 600; font-size: 10px; white-space: nowrap; }
+
+.pp-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.pp-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  margin-top: 5px;
+  font-weight: 600;
+  font-size: 10px;
+  white-space: nowrap;
+}
 
 /* a line you can type on */
 .pp-line {
@@ -85,37 +162,97 @@
   min-width: 40px;
   min-height: 14px;
   padding: 0 3px;
-  border-bottom: 1px solid #111;
+  border-bottom: 1px solid #111111;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
- 
 }
 
-.pp-acc { display: flex; gap: 14px; margin-top: 2px; }
+.pp-acc {
+  display: flex;
+  gap: 14px;
+  margin-top: 2px;
+}
 
-.pp-wide { display: flex; margin-top: 6px; border: 2px solid #111; }
-.pp-lab { flex: 0 0 150px; padding: 8px 8px; font-weight: 700; border-right: 2px solid #111; }
-.pp-val { flex: 1; min-height: 34px; padding: 6px 8px; font-weight: 500; }
+.pp-wide {
+  display: flex;
+  margin-top: 6px;
+  border: 2px solid #111111;
+}
 
-/* check lists */
-.pp-qc { display: flex; margin-top: 6px; border: 2px solid #111; }
-.pp-qcol { flex: 1; min-width: 0; }
-.pp-qcol + .pp-qcol { border-left: 2px solid #111; }
-.pp-qtitle { padding: 1px 0; text-align: center; font-weight: 700; font-size: 10.5px; border-bottom: 2px solid #111; }
-.pp-sec { padding: 1px 5px; background: #c9dcf0; font-weight: 700; border-top: 1px solid #111; border-bottom: 1px solid #111; }
-.pp-qtitle + .pp-sec { border-top: 0; }
-.pp-items { display: grid; grid-template-columns: 1fr 1fr; gap: 0 6px; padding: 3px 6px; }
+.pp-lab {
+  flex: 0 0 150px;
+  padding: 8px;
+  font-weight: 700;
+  border-right: 2px solid #111111;
+}
 
-.pp-ck { display: flex; align-items: center; gap: 7px; height: 16px; font-size: 9px; }
+.pp-val {
+  flex: 1;
+  min-height: 34px;
+  padding: 6px 8px;
+  font-weight: 500;
+}
+
+
+/* ----- check lists ----- */
+.pp-qc {
+  display: flex;
+  margin-top: 6px;
+  border: 2px solid #111111;
+}
+
+.pp-qcol {
+  flex: 1;
+  min-width: 0;
+  border-left: 2px solid #111111;
+}
+
+.pp-qcol:first-child {
+  border-left: 0;
+}
+
+.pp-qtitle {
+  padding: 1px 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 10.5px;
+  border-bottom: 1px solid #111111;
+}
+
+.pp-sec {
+  padding: 1px 5px;
+  background: #c9dcf0;
+  font-weight: 700;
+  border-top: 1px solid #111111;
+  border-bottom: 1px solid #111111;
+}
+
+.pp-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 6px;
+  padding: 3px 6px;
+}
+
+.pp-ck {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 16px;
+  font-size: 9px;
+}
+
 .pp-ck i {
   position: relative;
   flex: 0 0 12px;
   width: 12px;
   height: 12px;
-  border: 1.5px solid #111;
-  background: #fff;
+  border: 1.5px solid #111111;
+  background: #ffffff;
 }
+
+/* the check mark */
 .pp-ck.on i::after {
   content: "";
   position: absolute;
@@ -123,48 +260,186 @@
   top: -1px;
   width: 4px;
   height: 8px;
-  border: solid #111;
+  border: solid #111111;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
-.pp-ck.round { font-size: 10px; }
-.pp-ck.round i { border-radius: 50%; width: 13px; height: 13px; flex-basis: 13px; }
-.pp-ck.round.on i::after { left: 2.5px; top: 2.5px; width: 6px; height: 6px; border: 0; border-radius: 50%; background: #111; transform: none; }
-.pp-ck .pp-line { min-width: 40px; font-size: 9px; }
 
-.pp-auth { margin-top: 10px; text-align: center; }
-.pp-auth h4 { margin-bottom: 3px; font-size: 11px; font-weight: 600; }
-.pp-auth p { font-size: 8.6px; line-height: 1.45; }
+/* round check boxes */
+.pp-ck.round {
+  font-size: 10px;
+}
 
-.pp-sign { width: 270px; margin: 34px auto 0; padding-top: 3px; border-top: 1px solid #111; text-align: center; font-size: 9.5px; }
-.pp-signname { min-height: 16px; margin-bottom: 2px; font-weight: 600; font-size: 11px; }
+.pp-ck.round i {
+  border-radius: 50%;
+  width: 13px;
+  height: 13px;
+  flex-basis: 13px;
+}
+
+.pp-ck.round.on i::after {
+  left: 2.5px;
+  top: 2.5px;
+  width: 6px;
+  height: 6px;
+  border: 0;
+  border-radius: 50%;
+  background: #111111;
+  transform: none;
+}
+
+.pp-ck .pp-line {
+  min-width: 40px;
+  font-size: 9px;
+}
+
+.pp-auth {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.pp-auth h4 {
+  margin-bottom: 3px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.pp-auth p {
+  font-size: 8.6px;
+  line-height: 1.45;
+}
+
+.pp-sign {
+  width: 270px;
+  margin: 34px auto 0 auto;
+  padding-top: 3px;
+  border-top: 1px solid #111111;
+  text-align: center;
+  font-size: 9.5px;
+}
+
+.pp-signname {
+  min-height: 16px;
+  margin-bottom: 2px;
+  font-weight: 600;
+  font-size: 11px;
+}
 
 
 /* ===== Popup boxes that match the paper ===== */
-.form-wide { width: min(920px, 100%); }
-.pf-note { margin-top: 2px; }
+.form-wide {
+  width: 920px;
+  max-width: 100%;
+}
+
+.pf-note {
+  margin-top: 2px;
+}
 
 .pf-title {
-  margin: 24px 0 2px;
+  margin: 24px 0 2px 0;
   padding: 6px 10px;
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: 8px;
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.05em;
 }
-.pf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
 
-.pf-acc { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 6px; }
+.pf-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 24px;
+}
 
-.fck { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 13.5px; cursor: pointer; }
-.fck input[type="checkbox"] { width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--brand); cursor: pointer; }
-.form-box .fck-text { width: 150px; margin-left: 6px; padding: 4px 8px; border-radius: 8px; font-size: 13px; }
+.pf-acc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin-top: 6px;
+}
 
-.fck-sec { margin: 14px 0 4px; font-size: 13px; font-weight: 600; }
-.fck-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+.fck {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+
+.fck input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--brand);
+  cursor: pointer;
+}
+
+.form-box .fck-text {
+  width: 150px;
+  margin-left: 6px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.fck-sec {
+  margin: 14px 0 4px 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.fck-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 24px;
+}
 
 @media (max-width: 640px) {
-  .pf-grid, .fck-cols { grid-template-columns: 1fr; }
+  .pf-grid,
+  .fck-cols {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ===== Make the Job Order popup a little smaller (same layout) ===== */
+.form-box.form-wide {
+  padding: 16px 20px;
+  max-height: 85vh;
+  overflow-y: auto;
+  margin: auto;
+}
+
+.form-wide h2 {
+  font-size: 17px;
+}
+
+.form-wide .form-label {
+  margin-top: 8px;
+  margin-bottom: 3px;
+  font-size: 11.5px;
+}
+
+.form-wide .input {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.form-wide .pf-title {
+  margin-top: 14px;
+  padding: 4px 10px;
+}
+
+.form-wide .fck {
+  padding: 1px 0;
+  font-size: 12.5px;
+}
+
+.form-wide .fck-sec {
+  margin: 8px 0 2px 0;
+}
+
+.form-wide .form-buttons {
+  margin-top: 14px;
 }

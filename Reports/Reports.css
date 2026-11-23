@@ -1,5 +1,6 @@
-/* ===== Reports.css ===== */
-/* Your main.css already styles the buttons, inputs and labels. */
+/* ===== Reports.css =====
+   Only what is specific to the Reports page.
+   Colors, buttons, inputs and fonts come from /main/main.css. */
 
 .rep {
   display: flex;
@@ -15,16 +16,16 @@
   gap: 12px;
 }
 
-/* A white card with a thin border */
+/* A box with a thin border */
 .rep-box {
-  background: #FFFDFA;
-  border: 1px solid #E8DFD0;
-  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
   padding: 16px;
 }
 
 .rep-title {
-  margin: 0 0 4px;
+  margin: 0 0 4px 0;
   font-size: 18px;
 }
 
@@ -41,16 +42,29 @@
   width: 180px;
 }
 
-/* the filter button that is selected */
-.rep-row .btn.on {
-  background: #2A1D14;
-  color: #FFFFFF;
+/* filter buttons: plain, and red when selected */
+.rep-row .btn {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--text);
 }
+
+.rep-row .btn:hover {
+  background: var(--surface-2);
+  border-color: var(--line-strong);
+}
+
+.rep-row .btn.on {
+  background: var(--red);
+  border-color: var(--red);
+  color: #ffffff;
+}
+
 
 /* ----- 4 number boxes ----- */
 .rep-stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 12px;
 }
 
@@ -59,6 +73,7 @@
   font-size: 26px;
   margin: 6px 0;
 }
+
 
 /* ----- 2 big boxes side by side ----- */
 .rep-two {
@@ -73,7 +88,7 @@
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px solid #F0E8DA;
+  border-bottom: 1px solid var(--line);
   font-size: 14px;
 }
 
@@ -81,8 +96,42 @@
   font-weight: 600;
 }
 
-/* On small screens */
+
+/* ----- Small screens ----- */
 @media (max-width: 800px) {
-  .rep-stats { grid-template-columns: 1fr 1fr; }
-  .rep-two { grid-template-columns: 1fr; }
+  .rep-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .rep-two {
+    grid-template-columns: 1fr;
+  }
+}
+
+.btns {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--red);
+  background: var(--red);
+  color: #fff;
+  font: inherit;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-left: 5px;
+}
+
+.btnss {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--red);
+  background: var(--red);
+  color: #fff;
+  font: inherit;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-left: 5px;
 }

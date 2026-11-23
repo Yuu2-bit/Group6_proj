@@ -2,6 +2,7 @@
    Only what is specific to the Dashboard page.
    Colors, nav, cards, tables and badges come from /main/main.css. */
 
+
 /* ----- Table + popular services ----- */
 .two-columns {
   display: grid;
@@ -9,12 +10,22 @@
   gap: 16px;
 }
 
-.services-card { padding: 24px; }
-.table-card .small-text, .services-card .small-text { margin-top: 2px; }
+.services-card {
+  padding: 24px;
+}
+
+.table-card .small-text,
+.services-card .small-text {
+  margin-top: 2px;
+}
 
 
 /* ----- Popular services bars ----- */
-#services-list { margin-top: 20px; display: grid; gap: 18px; }
+#services-list {
+  margin-top: 20px;
+  display: grid;
+  gap: 18px;
+}
 
 .service-top {
   display: flex;
@@ -22,14 +33,32 @@
   gap: 12px;
   margin-bottom: 7px;
 }
-.service-top span:first-child { font-weight: 500; }
-.service-top span:last-child { color: var(--muted); }
 
-.bar-back { height: 6px; border-radius: 999px; background: #efe4d3; overflow: hidden; }
-.bar-fill { height: 100%; background: linear-gradient(90deg, var(--brand), #d99a5b); border-radius: 999px; }
+.service-top span:first-child {
+  font-weight: 500;
+}
+
+.service-top span:last-child {
+  color: var(--muted);
+}
+
+.bar-back {
+  height: 6px;
+  border-radius: 50px;
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: var(--brand);
+  border-radius: 50px;
+}
 
 
-/* ----- Responsive ----- */
+/* ----- Small screens ----- */
 @media (max-width: 1100px) {
-  .two-columns { grid-template-columns: 1fr; }
+  .two-columns {
+    grid-template-columns: 1fr;
+  }
 }

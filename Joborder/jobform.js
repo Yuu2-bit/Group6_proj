@@ -1,15 +1,3 @@
-// ===== jobform.js =====
-// Connects the job order boxes to the printed "Job Order Form" paper.
-//   - the New Job Order and View popups have the same boxes as the paper
-//   - the paper preview is filled in for you (it cannot be edited)
-//   - the only way to get it out is "Download PDF"
-//
-// Needs Joborder.js (allJobs, viewingId, loadJobs) and data.js (jobCode, formatDate).
-// No database code in here. The extra paper answers (address, accessories,
-// check lists...) are remembered in this browser, one set per job order.
-
-
-// ----- Shop details printed at the top (change them here) -----
 var SHOP = {
   name: "RYZENTECH IT SOLUTIONS",
   address: "Dr. T.M Alday St., Poblacion 4, San Jose, Batangas",
