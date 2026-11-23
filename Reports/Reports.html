@@ -1,69 +1,109 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>Reports - Admin</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/main/main.css">
-  <link rel="stylesheet" href="/Reports/Reports.css">
+
+  <link rel="stylesheet" href="../main/main.css">
+  <link rel="stylesheet" href="Reports.css">
 </head>
+
 <body>
   <header class="sidebar">
-    <a href="/Dashboard/Dashboard.html" class="logo" aria-label="Home"><img src="/main/Logo.png" alt="Company logo"></a>
+    <a href="../dashboard/Dashboard.html" class="logo" aria-label="Home">
+      <img src="../main/Logo.png" alt="Company logo">
+    </a>
+
     <nav class="menu">
-      <a href="/Dashboard/Dashboard.html" class="menu-link">Dashboard</a>
-      <a href="/Joborder/Joborder.html" class="menu-link">Job Order</a>
-      <a href="/Customers/Customers.html" class="menu-link">Customers</a>
-      <a href="/Inventory/Inventory.html" class="menu-link">Inventory</a>
-      <a href="/Payments/Payments.html" class="menu-link">Payments</a>
-      <a href="/Reports/Reports.html" class="menu-link active">Reports</a>
+      <a href="../dashboard/Dashboard.html" class="menu-link">Dashboard</a>
+      <a href="../joborder/Joborder.html" class="menu-link">Job Order</a>
+      <a href="../customers/Customers.html" class="menu-link">Customers</a>
+      <a href="../inventory/Inventory.html" class="menu-link">Inventory</a>
+      <a href="../payments/Payments.html" class="menu-link">Payments</a>
+      <a href="Reports.html" class="menu-link active">Reports</a>
     </nav>
+
     <div class="welcome-box">
-      <div><p class="small-text">Welcome,</p><p class="bold-text">Admin</p></div>
+      <div>
+        <p class="small-text">Welcome,</p>
+        <p class="bold-text">Admin</p>
+      </div>
       <div class="circle">AD</div>
     </div>
   </header>
 
   <main class="content">
     <div class="rep">
-
       <div class="rep-head">
         <div>
           <h1 class="page-title">Reports</h1>
           <br>
         </div>
+
         <div class="head-buttons">
           <button class="btn btn-green" id="excelBtn">Download Excel</button>
-          <a class="btns" href="/Dashboard/Dashboard.html">Dashboard</a>
-          <a class="btns" href="/Joborder/Joborder.html">Repair Orders</a>
+          <a class="btns" href="../dashboard/Dashboard.html">Dashboard</a>
+          <a class="btns" href="../joborder/Joborder.html">Repair Orders</a>
         </div>
       </div>
 
-      <!-- Filters -->
       <div class="rep-box">
         <h2 class="rep-title">Report Filters</h2>
+
         <div class="rep-row" id="rangeChips">
           <button class="btn" data-range="all">All Time</button>
           <button class="btn" data-range="today">Today</button>
           <button class="btn" data-range="week">Last 7 Days</button>
           <button class="btn" data-range="month">This Month</button>
         </div>
+
         <div class="rep-row">
-          <div><p class="label">FROM</p><input type="date" id="fromDate" class="input"></div>
-          <div><p class="label">TO</p><input type="date" id="toDate" class="input"></div>
+          <div>
+            <p class="label">FROM</p>
+            <input type="date" id="fromDate" class="input">
+          </div>
+
+          <div>
+            <p class="label">TO</p>
+            <input type="date" id="toDate" class="input">
+          </div>
+
           <button class="btnss" id="applyBtn">Apply Date Range</button>
         </div>
+
         <p class="err" id="repErr"></p>
       </div>
 
-      <!-- Number boxes -->
       <div class="rep-stats">
-        <div class="rep-box"><p class="small-text">Repair Orders</p><strong id="sOrders">0</strong><p class="small-text">Received during selected period</p></div>
-        <div class="rep-box"><p class="small-text">Service Value</p><strong id="sValue">₱0.00</strong><p class="small-text">Total price of the job orders</p></div>
-        <div class="rep-box"><p class="small-text">Payments Collected</p><strong id="sCollected">₱0.00</strong><p class="small-text">Actual recorded payments in period</p></div>
-        <div class="rep-box"><p class="small-text">Outstanding Balance</p><strong id="sBalance">₱0.00</strong><p class="small-text">Unpaid balance of selected JOs</p></div>
+        <div class="rep-box">
+          <p class="small-text">Repair Orders</p>
+          <strong id="sOrders">0</strong>
+          <p class="small-text">Received during selected period</p>
+        </div>
+
+        <div class="rep-box">
+          <p class="small-text">Service Value</p>
+          <strong id="sValue">₱0.00</strong>
+          <p class="small-text">Total price of the job orders</p>
+        </div>
+
+        <div class="rep-box">
+          <p class="small-text">Payments Collected</p>
+          <strong id="sCollected">₱0.00</strong>
+          <p class="small-text">Actual recorded payments in period</p>
+        </div>
+
+        <div class="rep-box">
+          <p class="small-text">Outstanding Balance</p>
+          <strong id="sBalance">₱0.00</strong>
+          <p class="small-text">Unpaid balance of selected JOs</p>
+        </div>
       </div>
 
       <div class="rep-two">
@@ -72,19 +112,19 @@
           <p class="small-text">Current status of Job Orders received during the selected period.</p>
           <div id="statusList"></div>
         </div>
+
         <div class="rep-box">
           <h2 class="rep-title">Financial Summary</h2>
           <p class="small-text">Recorded collections and current financial position.</p>
           <div id="moneyList"></div>
         </div>
       </div>
-
     </div>
   </main>
 
-  <script src="/main/ui.js"></script>
+  <script src="../main/ui.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/main/data.js"></script>
-  <script src="/Reports/Reports.js"></script>
+  <script src="../main/data.js"></script>
+  <script src="Reports.js"></script>
 </body>
 </html>

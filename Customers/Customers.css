@@ -1,141 +1,303 @@
-/* ===== Customers.css =====
-   Only what is specific to the Customers page.
-   Colors, nav, cards, tables, badges and buttons come from /main/main.css. */
 
 .description {
-  max-width: 640px;
+    max-width: 640px;
 }
 
-
-/* ----- Search bar ----- */
 .search-row {
-  max-width: 720px;
-  margin-bottom: 20px;
+    max-width: 720px;
+    margin-bottom: 20px;
 }
 
 .search-box {
-  position: relative;
-  flex: 1;
-  min-width: 0;
+    position: relative;
+    flex: 1;
+    min-width: 0;
 }
 
 .search-box svg {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  margin-top: -8px;
-  width: 16px;
-  height: 16px;
-  color: var(--muted);
-  pointer-events: none;
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    margin-top: -8px;
+    width: 16px;
+    height: 16px;
+    color: var(--muted);
+    pointer-events: none;
 }
 
 .search-box .input {
-  width: 100%;
-  padding: 11px 14px 11px 40px;
-  border-radius: 8px;
+    width: 100%;
+    padding: 11px 14px 11px 40px;
+    border-radius: 8px;
 }
 
 .search-row .btn {
-  border-radius: 8px;
-  padding: 0 22px;
+    border-radius: 8px;
+    padding: 0 22px;
 }
 
-
-/* ----- Customer card ----- */
 .table-card {
-  padding: 0;
-  overflow: hidden;
+    padding: 0;
+    overflow: hidden;
 }
 
 .card-head {
-  padding: 22px 24px 18px 24px;
-  border-bottom: 1px solid var(--line);
+    padding: 22px 24px 18px 24px;
+    border-bottom: 1px solid var(--line);
 }
 
 .table-card .table-wrap {
-  margin-top: 0;
+    margin-top: 0;
 }
 
 .table-card th,
 .table-card td {
-  padding-left: 24px;
+    padding-left: 24px;
 }
 
 .table-card th:last-child,
 .table-card td:last-child {
-  padding-right: 24px;
-  text-align: right;
+    padding-right: 24px;
+    text-align: right;
 }
 
 .table-card th {
-  background: var(--surface-2);
-  padding-top: 12px;
-  padding-bottom: 12px;
+    background: var(--surface-2);
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
 
 #customer-list tr:hover {
-  background: var(--surface-2);
+    background: var(--surface-2);
 }
 
-/* column looks: ID, then name, then the rest */
 #customer-list td:first-child {
-  color: var(--muted);
-  font-size: 13px;
-  font-family: monospace;
+    color: var(--muted);
+    font-size: 13px;
+    font-family: monospace;
 }
 
 #customer-list td:nth-child(2) {
-  font-weight: 500;
+    font-weight: 500;
 }
 
 #customer-list td:nth-child(3),
 #customer-list td:nth-child(4) {
-  color: var(--muted);
+    color: var(--muted);
 }
 
-/* "No customers found" / loading row */
 #customer-list td[colspan] {
-  text-align: center;
-  color: var(--muted);
-  padding: 40px 24px;
+    text-align: center;
+    color: var(--muted);
+    padding: 40px 24px;
 }
 
-
-/* ----- Row buttons (View, Edit, History...) ----- */
 #customer-list td button,
 #customer-list td .btn,
 #customer-list td a {
-  padding: 6px 14px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface);
-  color: var(--text);
-  font: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
+    padding: 6px 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
 }
 
 #customer-list td button:hover,
 #customer-list td .btn:hover,
 #customer-list td a:hover {
-  background: var(--surface-3);
-  border-color: var(--line-strong);
+    background: var(--surface-3);
+    border-color: var(--line-strong);
 }
 
+.view-link {
+    display: inline-block;
+    text-decoration: none;
+}
 
-/* ----- Small screens ----- */
+/* Customer details modal */
+
+.customer-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.customer-modal-content {
+    background: var(--surface);
+    color: var(--text);
+    width: 100%;
+    max-width: 700px;
+    max-height: 85vh;
+    overflow-y: auto;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 26px;
+    border-bottom: 1px solid var(--line);
+}
+
+.modal-header h2 {
+    margin: 0 0 5px;
+}
+
+.modal-header p {
+    margin: 0;
+}
+
+.close-modal {
+    border: none;
+    background: none;
+    color: var(--muted);
+    font-size: 30px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: var(--text);
+}
+
+.customer-details {
+    padding: 24px 26px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.detail-item {
+    min-width: 0;
+}
+
+.detail-label {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 7px;
+}
+
+.detail-item p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.history-section {
+    margin-top: 28px;
+}
+
+.history-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.history-heading h3 {
+    margin: 0;
+}
+
+.history-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.history-table th,
+.history-table td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.history-table th {
+    background: var(--surface-2);
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.history-table tr:last-child td {
+    border-bottom: none;
+}
+
+.history-table td[colspan] {
+    text-align: center;
+    padding: 25px;
+    color: var(--muted);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 26px;
+    border-top: 1px solid var(--line);
+}
+
+.modal-footer .btn {
+    border-radius: 8px;
+    padding: 10px 22px;
+}
+
+/* Small screens */
+
 @media (max-width: 760px) {
-  .search-row {
-    flex-direction: column;
-  }
+    .search-row {
+        flex-direction: column;
+    }
 
-  .search-row .btn {
-    padding: 11px 22px;
-  }
+    .search-row .btn {
+        padding: 11px 22px;
+    }
 
-  .card-head {
-    padding: 18px 20px 14px 20px;
-  }
+    .card-head {
+        padding: 18px 20px 14px 20px;
+    }
+
+    .customer-modal {
+        padding: 12px;
+    }
+
+    .customer-modal-content {
+        max-height: 90vh;
+    }
+
+    .modal-header,
+    .customer-details {
+        padding: 18px;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .modal-footer {
+        padding: 14px 18px;
+    }
 }

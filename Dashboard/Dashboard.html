@@ -1,30 +1,34 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>Dashboard - Admin</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/main/main.css">
-  <link rel="stylesheet" href="/Dashboard/Dashboard.css">
+
+  <link rel="stylesheet" href="../main/main.css">
+  <link rel="stylesheet" href="Dashboard.css">
 </head>
 
 <body>
 
-  <!-- ===== TOP NAVIGATION ===== -->
   <header class="sidebar">
-    <a href="/Dashboard/Dashboard.html" class="logo" aria-label="Home">
-      <img src="/main/Logo.png" alt="Company logo">
+    <a href="Dashboard.html" class="logo" aria-label="Home">
+      <img src="../main/Logo.png" alt="Company logo">
     </a>
 
     <nav class="menu">
-      <a href="/Dashboard/Dashboard.html" class="menu-link active">Dashboard</a>
-      <a href="/Joborder/Joborder.html" class="menu-link">Job Order</a>
-      <a href="/Customers/Customers.html" class="menu-link">Customers</a>
-      <a href="/Inventory/Inventory.html" class="menu-link">Inventory</a> 
-      <a href="/Payments/Payments.html" class="menu-link">Payments</a>
-      <a href="/Reports/Reports.html" class="menu-link">Reports</a>
+      <a href="Dashboard.html" class="menu-link active">Dashboard</a>
+      <a href="../Joborder/Joborder.html" class="menu-link">Job Order</a>
+      <a href="../Customers/Customers.html" class="menu-link">Customers</a>
+      <a href="../Inventory/Inventory.html" class="menu-link">Inventory</a>
+      <a href="../Payments/Payments.html" class="menu-link">Payments</a>
+      <a href="../Reports/Reports.html" class="menu-link">Reports</a>
     </nav>
 
     <div class="welcome-box">
@@ -36,14 +40,11 @@
     </div>
   </header>
 
-
-  <!-- ===== PAGE CONTENT ===== -->
   <main class="content">
 
     <h1 class="page-title">Dashboard</h1>
     <br>
 
-    <!-- ===== 4 STAT BOXES (Dashboard.js fills in the numbers) ===== -->
     <div class="stats-row">
 
       <div class="card stat-box">
@@ -72,8 +73,6 @@
 
     </div>
 
-
-    <!-- ===== TABLE + POPULAR SERVICES ===== -->
     <div class="two-columns">
 
       <div class="card table-card">
@@ -102,12 +101,13 @@
       </div>
 
     </div>
+
   </main>
 
-  <script src="/main/ui.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/main/data.js"></script>
-  <script src="/Dashboard/Dashboard.js"></script>
+  <script src="../main/ui.js"></script>
+  <script src="../main/data.js"></script>
+  <script src="Dashboard.js"></script>
 
 </body>
 </html>

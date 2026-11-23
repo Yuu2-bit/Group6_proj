@@ -161,7 +161,7 @@ h2 {
   height: 40px;
   border-radius: 50%;
   background-color: var(--surface-3);
-  background-image: url("/main/Logo.png");
+  background-image: url("../main/Logo.png");
   background-size: cover;
   background-position: center;
   color: transparent;      /* hides the "AD" letters */
@@ -234,7 +234,7 @@ h2 {
   height: 42px;
   border-radius: 50%;
   background-color: var(--surface-3);
-  background-image: url("/main/Logo.png");
+  background-image: url("../main/Logo.png");
   background-size: cover;
   background-position: center;
 }
