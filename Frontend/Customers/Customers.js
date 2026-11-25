@@ -1,5 +1,7 @@
 var allCustomers = [];
 var firstRender = true;
+var viewingCustomerId = null;
+var viewingJobCount = null;
 
 async function loadCustomers() {
     try {
@@ -109,6 +111,10 @@ async function viewCustomer(id) {
         return;
     }
 
+    // Remember which customer is open (used by the Delete button)
+    viewingCustomerId = c.id;
+    viewingJobCount = null;
+
     document.getElementById("view-id").textContent = customerCode(c);
     document.getElementById("view-name").textContent = c.name || "—";
     document.getElementById("view-type").textContent = c.type || "—";
@@ -140,6 +146,11 @@ async function viewCustomer(id) {
             if (String(jobs[n].customer_id) == String(id)) {
                 history.push(jobs[n]);
             }
+        }
+
+        // Only update if this customer's popup is still open
+        if (String(viewingCustomerId) == String(id)) {
+            viewingJobCount = history.length;
         }
 
         if (history.length == 0) {
@@ -178,8 +189,48 @@ async function viewCustomer(id) {
     }
 }
 
+async function deleteCurrentCustomer() {
+    if (viewingCustomerId === null) {
+        return;
+    }
+
+    if (viewingJobCount === null) {
+        alert("Repair history is still loading. Please try again in a moment.");
+        return;
+    }
+
+    var name = document.getElementById("view-name").textContent;
+    var message = 'Delete customer "' + name + '"?';
+
+    if (viewingJobCount > 0) {
+        message += "\n\nThis customer has " + viewingJobCount +
+            (viewingJobCount == 1 ? " job order" : " job orders") +
+            ". They will be deleted too.";
+    }
+
+    message += "\n\nThis cannot be undone.";
+
+    if (!confirm(message)) {
+        return;
+    }
+
+    var error = await deleteCustomer(viewingCustomerId, viewingJobCount > 0);
+
+    if (error) {
+        alert("Unable to delete customer: " + error);
+        return;
+    }
+
+    closeCustomerModal();
+
+    await loadCustomers();
+}
+
 function closeCustomerModal() {
     document.getElementById("customerModal").style.display = "none";
+
+    viewingCustomerId = null;
+    viewingJobCount = null;
 }
 
 var customerModal = document.getElementById("customerModal");

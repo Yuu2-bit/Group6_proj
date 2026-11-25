@@ -254,6 +254,7 @@
 .modal-footer {
     display: flex;
     justify-content: flex-end;
+    gap: 10px;
     padding: 16px 26px;
     border-top: 1px solid var(--line);
 }
@@ -261,6 +262,19 @@
 .modal-footer .btn {
     border-radius: 8px;
     padding: 10px 22px;
+}
+
+/* Delete button: pushed to the left side of the footer */
+.modal-footer .btn-danger {
+    margin-right: auto;
+    background: #dc2626;
+    border-color: #dc2626;
+    color: #fff;
+}
+
+.modal-footer .btn-danger:hover {
+    background: #b91c1c;
+    border-color: #b91c1c;
 }
 
 /* Animations */
@@ -295,7 +309,8 @@
 #customer-list tr,
 #customer-list td button,
 #customer-list td .btn,
-#customer-list td a {
+#customer-list td a,
+.modal-footer .btn-danger {
     transition: background 0.15s ease, border-color 0.15s ease;
 }
 

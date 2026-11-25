@@ -9,7 +9,10 @@ module.exports = function errorHandler(err, req, res, next) {
     status = 409;
     const left = (message.match(/INSUFFICIENT_STOCK:(\d+)/) || [])[1];
     message = left !== undefined ? 'Only ' + left + ' in stock.' : 'Not enough stock.';
-  } else if (/ITEM_NOT_FOUND/.test(message)) { status = 404; message = 'Inventory item not found.'; }
+  }
+  else if (/ITEM_NOT_FOUND/.test(message)) { status = 404; message = 'Inventory item not found.'; }
+  else if (/ITEM_INACTIVE/.test(message)) { status = 409; message = 'This item is inactive.'; }
+  else if (/INVALID_(QUANTITY|TRANSACTION_TYPE)/.test(message)) { status = 400; message = 'Invalid stock movement.'; }
 
   if (status >= 500) {
     console.error(err);
