@@ -5,6 +5,7 @@
 // Tip: "await" means "wait here until the database answers".
 
 var payments = [];     // the payments of the date we are viewing
+var firstRender = true; // true until the table has shown rows once (used for the row animation)
 
 
 // ===== Small helper functions =====
@@ -65,6 +66,9 @@ function draw() {
   var jobs = [];       // the different job orders that were paid
   var html = "";
 
+  // Rows only slide in the first time they appear, not on every auto-refresh
+  byId("payBody").classList.toggle("animate-rows", firstRender && payments.length > 0);
+
   // go through every payment one by one
   for (var i = 0; i < payments.length; i++) {
     var p = payments[i];
@@ -74,8 +78,8 @@ function draw() {
     if (p.method == "Cash") { cash = cash + amount; }
     if (jobs.indexOf(p.job_order_no) == -1) { jobs.push(p.job_order_no); }
 
-    // one table row for this payment
-    html += "<tr>" +
+    // one table row for this payment (--i staggers the first-load animation)
+    html += "<tr style='--i:" + Math.min(i, 15) + "'>" +
       "<td>" + escapeText(p.job_order_no) + "</td>" +
       "<td>" + escapeText(p.customer) + "</td>" +
       "<td>" + escapeText(p.method) + "</td>" +
@@ -96,6 +100,8 @@ function draw() {
   byId("sCash").textContent = money(cash);
   byId("sJobs").textContent = jobs.length;
   byId("recCount").textContent = payments.length + " payment(s)";
+
+  if (payments.length > 0) { firstRender = false; }
 }
 
 

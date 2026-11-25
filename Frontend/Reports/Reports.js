@@ -15,6 +15,7 @@ var fromDate = "";      // "" means no start limit
 var toDate = "";        // "" means no end limit
 var rangeName = "all";  // all, today, week, month or custom
 var shownJobs = [];     // the job orders inside the period (used by the Excel download)
+var firstRender = true; // true until the lists have shown data once (used for the line animation)
 
 
 // ===== Small helper functions =====
@@ -135,18 +136,25 @@ function draw() {
   byId("sCollected").textContent = money(collected);
   byId("sBalance").textContent = money(balance);
 
+  // The lines only slide in the first time they appear, not on filter clicks or auto-refresh
+  var animateNow = (firstRender && shownJobs.length > 0);
+  byId("statusList").classList.toggle("animate-lines", animateNow);
+  byId("moneyList").classList.toggle("animate-lines", animateNow);
+
   var statusHtml = "";
   for (var s = 0; s < statusNames.length; s++) {
-    statusHtml += "<div class='rep-line'><span>" + escapeText(String(statusNames[s]).toUpperCase()) + "</span><b>" + statusCounts[s] + "</b></div>";
+    statusHtml += "<div class='rep-line' style='--i:" + Math.min(s, 10) + "'><span>" + escapeText(String(statusNames[s]).toUpperCase()) + "</span><b>" + statusCounts[s] + "</b></div>";
   }
   if (statusHtml == "") { statusHtml = "<p class='small-text'>No job orders in this period.</p>"; }
   byId("statusList").innerHTML = statusHtml;
 
   byId("moneyList").innerHTML =
-    "<div class='rep-line'><span>Service Value</span><b>" + money(serviceValue) + "</b></div>" +
-    "<div class='rep-line'><span>Collected in Period</span><b>" + money(collected) + "</b></div>" +
-    "<div class='rep-line'><span>Currently Paid on Selected JOs</span><b>" + money(paidOnJobs) + "</b></div>" +
-    "<div class='rep-line'><span>Outstanding Balance</span><b>" + money(balance) + "</b></div>";
+    "<div class='rep-line' style='--i:0'><span>Service Value</span><b>" + money(serviceValue) + "</b></div>" +
+    "<div class='rep-line' style='--i:1'><span>Collected in Period</span><b>" + money(collected) + "</b></div>" +
+    "<div class='rep-line' style='--i:2'><span>Currently Paid on Selected JOs</span><b>" + money(paidOnJobs) + "</b></div>" +
+    "<div class='rep-line' style='--i:3'><span>Outstanding Balance</span><b>" + money(balance) + "</b></div>";
+
+  if (animateNow) { firstRender = false; }
 
   drawPeriod();
 }

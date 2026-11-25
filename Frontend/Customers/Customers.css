@@ -1,4 +1,3 @@
-
 .description {
     max-width: 640px;
 }
@@ -264,6 +263,46 @@
     padding: 10px 22px;
 }
 
+/* Animations */
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: translateY(18px) scale(0.97); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* Page load: sections fade up one after another */
+.description { animation: fadeUp 0.5s ease both; }
+.search-row  { animation: fadeUp 0.5s ease 0.08s both; }
+.table-card  { animation: fadeUp 0.5s ease 0.16s both; }
+
+/* Table rows cascade in (first render only, see JS) */
+#customer-list.animate-rows tr {
+    animation: fadeUp 0.4s ease both;
+    animation-delay: calc(var(--i, 0) * 30ms + 250ms);
+}
+
+/* Smooth hovers */
+#customer-list tr,
+#customer-list td button,
+#customer-list td .btn,
+#customer-list td a {
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+/* Modal: backdrop fades, card pops in */
+.customer-modal         { animation: fadeIn 0.2s ease; }
+.customer-modal-content { animation: popIn 0.25s ease; }
+
 /* Small screens */
 
 @media (max-width: 760px) {
@@ -299,5 +338,13 @@
 
     .modal-footer {
         padding: 14px 18px;
+    }
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
     }
 }

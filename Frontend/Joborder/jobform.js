@@ -1,4 +1,3 @@
-
 var SHOP = {
   name: "RYZENTECH IT SOLUTIONS",
   address: "Dr. T.M Alday St., Poblacion 4, San Jose, Batangas",

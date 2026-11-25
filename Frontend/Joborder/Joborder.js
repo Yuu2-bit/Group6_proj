@@ -6,6 +6,41 @@ var allJobs = [];          // every job order from the database
 var viewingId = 0;         // the job order shown in the View popup
 
 
+// ----- Intro animation (first load only) -----
+// "first-load" on <body> switches on the table-row animation in Joborder.css.
+// It is removed after 2 seconds so searching / auto-refresh do not replay it.
+var firstLoad = true;
+document.body.classList.add("first-load");
+setTimeout(function () {
+  document.body.classList.remove("first-load");
+  firstLoad = false;
+}, 2000);
+
+// Sets a stat number. On first load it counts up from 0.
+function setStat(id, value) {
+  var el = document.getElementById(id);
+
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!firstLoad || reduce) {
+    el.innerHTML = value.toLocaleString();
+    return;
+  }
+
+  var start = null;
+  function step(t) {
+    if (start === null) { start = t; }
+    var p = Math.min((t - start) / 900, 1);
+    if (p >= 1) {
+      el.innerHTML = value.toLocaleString();
+      return;
+    }
+    el.innerHTML = Math.round(value * (1 - Math.pow(1 - p, 3))).toLocaleString();
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+
 // ----- Fill the drop-down lists -----
 function fillSelect(id, items, firstItem) {
   var html = "";
@@ -85,11 +120,11 @@ function showJobs() {
       if (a.level == "critical") { critical++; }
     }
   }
-  document.getElementById("stat-total").innerHTML = allJobs.length.toLocaleString();
-  document.getElementById("stat-open").innerHTML = open;
-  document.getElementById("stat-normal").innerHTML = normal;
-  document.getElementById("stat-aging").innerHTML = aging;
-  document.getElementById("stat-critical").innerHTML = critical;
+  setStat("stat-total", allJobs.length);
+  setStat("stat-open", open);
+  setStat("stat-normal", normal);
+  setStat("stat-aging", aging);
+  setStat("stat-critical", critical);
 
   // 2. Table rows (the first 300 matches)
   var list = getFilteredJobs();

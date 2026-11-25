@@ -13,6 +13,7 @@ var editingId = null;      // null means we are adding a NEW item
 var moveType = "in";       // "in" or "out" (for the stock popup)
 var loadError = "";        // filled when the database could not be read
 var upgradeNeeded = false; // true when selling_price / history are not in the database yet
+var firstRender = true;    // true until the table has shown rows once (used for the row animation)
 
 
 // ----- Lists you can change -----
@@ -225,8 +226,9 @@ function getFiltered() {
 
 // ===== Draw the page =====
 
-// Builds the HTML of ONE table row
-function makeRow(item) {
+// Builds the HTML of ONE table row.
+// position = the row number, used to stagger the first-load animation.
+function makeRow(item, position) {
   var status = stockStatus(item);
   var inactive = (item.active == false);
 
@@ -235,7 +237,7 @@ function makeRow(item) {
 
   var toggleText = inactive ? "Activate" : "Deactivate";
 
-  return "<tr" + (inactive ? " class='off'" : "") + " data-id='" + item.id + "'>" +
+  return "<tr" + (inactive ? " class='off'" : "") + " data-id='" + item.id + "' style='--i:" + Math.min(position, 15) + "'>" +
     "<td class='sku'>" + escapeText(item.sku) + "</td>" +
     "<td>" + cell(item.category) + "</td>" +
     "<td>" + cell(item.brand) + "</td>" +
@@ -259,9 +261,13 @@ function draw() {
   var list = getFiltered();
   var shown = list.slice(0, limit);          // only the first 60 (or more after "Show more")
 
+  // Rows only slide in the first time they appear, not while searching or auto-refreshing
+  var animateNow = (firstRender && shown.length > 0 && loadError == "");
+  byId("itemRows").classList.toggle("animate-rows", animateNow);
+
   var html = "";
   for (var i = 0; i < shown.length; i++) {
-    html += makeRow(shown[i]);
+    html += makeRow(shown[i], i);
   }
   if (loadError != "") {
     html = "<tr><td colspan='11' class='empty'>Could not load items: " + escapeText(loadError) + "</td></tr>";
@@ -273,6 +279,8 @@ function draw() {
   byId("countText").textContent = "Showing " + shown.length + " of " + list.length + " inventory items";
   byId("moreBtn").hidden = (list.length <= limit);
   byId("dbNote").hidden = !upgradeNeeded;
+
+  if (animateNow) { firstRender = false; }
 }
 
 // The five boxes at the top (every item is counted)

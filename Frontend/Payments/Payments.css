@@ -240,3 +240,53 @@ dialog .btns button:last-child:hover {
   transition: background 0.15s;
   margin-left: 5px;
 }
+
+
+/* ===== Animations ===== */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Page load: each block fades up one after another */
+.pay > *             { animation: fadeUp 0.5s ease both; }
+.pay > *:nth-child(2) { animation-delay: 0.08s; }
+.pay > *:nth-child(3) { animation-delay: 0.16s; }
+.pay > *:nth-child(4) { animation-delay: 0.24s; }
+.pay > *:nth-child(5) { animation-delay: 0.32s; }
+
+/* Table rows cascade in (first render only, see Payments.js) */
+#payBody.animate-rows tr {
+  animation: fadeUp 0.4s ease both;
+  animation-delay: calc(var(--i, 0) * 30ms + 350ms);
+}
+
+/* Smooth hovers */
+.pay-table tbody tr,
+dialog .btns button,
+dialog .x {
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+/* Popup: backdrop fades, card pops in each time it opens */
+dialog[open]           { animation: popIn 0.25s ease; }
+dialog[open]::backdrop { animation: fadeIn 0.2s ease; }
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

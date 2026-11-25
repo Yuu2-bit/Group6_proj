@@ -119,6 +119,7 @@ h2 {
 }
 
 .menu-link {
+  position: relative;
   padding: 9px 16px;
   border-radius: 8px;
   color: var(--muted);
@@ -541,5 +542,91 @@ tbody tr:last-child td {
 
   .stats-row {
     grid-template-columns: 1fr;
+  }
+}
+
+
+/* ===== Smooth navigation ===== */
+
+@keyframes menuIn {
+  from { opacity: 0; transform: translateY(-10px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Links change color and background smoothly */
+.menu-link,
+.welcome-box,
+.acct-item,
+.acct-btn {
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+/* A line slides in under a link on hover and stays under the active page */
+.menu-link::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--brand);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.25s ease;
+}
+
+.menu-link:hover::after {
+  transform: scaleX(1);
+}
+
+.menu-link.active::after {
+  transform: scaleX(1);
+}
+
+@media (max-width: 640px) {
+  .menu-link::after {
+    left: 12px;
+    right: 12px;
+  }
+}
+
+/* Smooth scrolling when the links row scrolls on phones */
+.menu {
+  scroll-behavior: smooth;
+}
+
+/* Account menu: opens with a short slide */
+.acct-menu {
+  transform-origin: top right;
+  animation: menuIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
+}
+
+/* The profile button presses in slightly when clicked */
+.welcome-box {
+  transition: color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+
+.welcome-box:active {
+  transform: scale(0.97);
+}
+
+/* The avatar picture eases when you hover the profile */
+.circle {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.welcome-box:hover .circle {
+  transform: scale(1.06);
+  box-shadow: 0 0 0 2px var(--brand-soft);
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }

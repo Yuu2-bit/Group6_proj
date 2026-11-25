@@ -272,3 +272,101 @@
     width: 100%;
   }
 }
+
+
+/* ----- Animations -----
+   Paste this at the very bottom of Joborder.css (after the last @media block). */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Header, stat boxes, filter bar and table fade up one after another.
+   (They are fixed HTML, so this only runs once when the page opens.) */
+.page-head {
+  animation: fadeUp 0.5s ease backwards;
+}
+
+.stats-row > * {
+  animation: fadeUp 0.55s ease backwards;
+  animation-delay: var(--d, 0s);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stats-row > *:nth-child(1) { --d: 0.05s; }
+.stats-row > *:nth-child(2) { --d: 0.11s; }
+.stats-row > *:nth-child(3) { --d: 0.17s; }
+.stats-row > *:nth-child(4) { --d: 0.23s; }
+.stats-row > *:nth-child(5) { --d: 0.29s; }
+
+.stats-row > *:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.filter-card {
+  animation: fadeUp 0.55s ease 0.35s backwards;
+}
+
+.count-text {
+  animation: fadeIn 0.6s ease 0.45s backwards;
+}
+
+.table-card {
+  animation: fadeUp 0.55s ease 0.42s backwards;
+}
+
+/* Table rows are redrawn on every search / refresh, so they only
+   animate during the first 2 seconds (body.first-load, set in Joborder.js) */
+.first-load #job-list tr {
+  animation: fadeUp 0.4s ease 0.75s backwards;
+}
+.first-load #job-list tr:nth-child(1) { animation-delay: 0.45s; }
+.first-load #job-list tr:nth-child(2) { animation-delay: 0.51s; }
+.first-load #job-list tr:nth-child(3) { animation-delay: 0.57s; }
+.first-load #job-list tr:nth-child(4) { animation-delay: 0.63s; }
+.first-load #job-list tr:nth-child(5) { animation-delay: 0.69s; }
+.first-load #job-list tr:nth-child(6) { animation-delay: 0.75s; }
+
+/* Popups (New Job Order, View, and the paper preview) animate every time they open */
+.overlay {
+  animation: fadeIn 0.2s ease;
+}
+
+.overlay .form-box {
+  animation: popIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.paper-overlay.show {
+  animation: fadeIn 0.25s ease;
+}
+
+/* Turn everything off for people who set "reduce motion" on their device */
+@media (prefers-reduced-motion: reduce) {
+  .page-head,
+  .stats-row > *,
+  .filter-card,
+  .count-text,
+  .table-card,
+  .first-load #job-list tr,
+  .overlay,
+  .overlay .form-box,
+  .paper-overlay.show {
+    animation: none;
+  }
+
+  .stats-row > *:hover {
+    transform: none;
+  }
+}

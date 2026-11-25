@@ -1,5 +1,5 @@
-
 var allCustomers = [];
+var firstRender = true;
 
 async function loadCustomers() {
     try {
@@ -52,6 +52,9 @@ function showCustomers() {
     var shown = matches.slice(0, 200);
     var rows = "";
 
+    // Only cascade the rows on the first render, not while searching or auto-refreshing
+    customerList.classList.toggle("animate-rows", firstRender && shown.length > 0);
+
     for (var n = 0; n < shown.length; n++) {
         var cu = shown[n];
 
@@ -59,7 +62,7 @@ function showCustomers() {
             ? "badge pending"
             : "badge done";
 
-        rows += "<tr>" +
+        rows += "<tr style='--i:" + Math.min(n, 15) + "'>" +
             "<td class='bold-text'>" + safe(customerCode(cu)) + "</td>" +
             "<td><div class='bold-text'>" + safe(cu.name || "") + "</div>" +
             "<div class='small-text'>" + safe(cu.type || "") + "</div></td>" +
@@ -80,6 +83,10 @@ function showCustomers() {
         "Showing " + shown.length.toLocaleString() +
         " of " + allCustomers.length.toLocaleString() +
         " customers";
+
+    if (shown.length > 0) {
+        firstRender = false;
+    }
 }
 
 var searchInput = document.getElementById("search-input");

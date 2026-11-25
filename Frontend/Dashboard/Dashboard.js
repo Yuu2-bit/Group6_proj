@@ -6,6 +6,44 @@
 var dashJobs = [];
 
 
+// ----- Intro animation (first load only) -----
+// "first-load" on <body> switches on the entrance animations in Dashboard.css.
+// It is removed after 2 seconds so the 15-second auto-refresh does not replay them.
+var firstLoad = true;
+document.body.classList.add("first-load");
+setTimeout(function () {
+  document.body.classList.remove("first-load");
+  firstLoad = false;
+}, 2000);
+
+// Sets a stat number. On first load it counts up from 0.
+function setStat(id, value, prefix) {
+  var el = document.getElementById(id);
+  prefix = prefix || "";
+
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!firstLoad || reduce) {
+    el.innerHTML = prefix + value.toLocaleString();
+    return;
+  }
+
+  var start = null;
+  var duration = 900;
+  function step(t) {
+    if (start === null) { start = t; }
+    var p = Math.min((t - start) / duration, 1);
+    if (p >= 1) {
+      el.innerHTML = prefix + value.toLocaleString();
+      return;
+    }
+    var eased = 1 - Math.pow(1 - p, 3);
+    el.innerHTML = prefix + Math.round(value * eased).toLocaleString();
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+
 // Pill color for each status
 function badgeFor(status) {
   if (status == "Released") { return "badge done"; }
@@ -37,16 +75,17 @@ async function loadDashboard() {
     if (new Date(customers[n].created_at).getTime() > weekAgo) { newCustomers++; }
   }
 
-  document.getElementById("stat-bookings").innerHTML = dashJobs.length.toLocaleString();
+  setStat("stat-bookings", dashJobs.length);
   document.getElementById("stat-bookings-note").innerHTML = thisWeek + " new this week";
-  document.getElementById("stat-pending").innerHTML = open.toLocaleString();
+  setStat("stat-pending", open);
   document.getElementById("stat-pending-note").innerHTML = critical + " need attention";
-  document.getElementById("stat-customers").innerHTML = customers.length.toLocaleString();
+  setStat("stat-customers", customers.length);
   document.getElementById("stat-customers-note").innerHTML = "+" + newCustomers + " new this week";
-  document.getElementById("stat-revenue").innerHTML = "₱" + revenue.toLocaleString();
+  setStat("stat-revenue", revenue, "₱");
 
   showRecent();
   showServices();
+  showCharts();
 }
 
 
@@ -96,6 +135,93 @@ function showServices() {
 
   if (html == "") { html = "<p class='small-text'>No job orders yet.</p>"; }
   document.getElementById("services-list").innerHTML = html;
+}
+
+
+// ----- Two extra charts -----
+function showCharts() {
+  showWeekChart();
+  showStatusChart();
+}
+
+// Bar chart: job orders received per day, last 7 days
+function showWeekChart() {
+  var days = [];
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  for (var d = 6; d >= 0; d--) {
+    var day = new Date(today);
+    day.setDate(today.getDate() - d);
+    days.push({ key: day.toDateString(), label: day.toLocaleDateString("en-US", { weekday: "short" }), count: 0 });
+  }
+
+  for (var i = 0; i < dashJobs.length; i++) {
+    if (!dashJobs[i].date_received) { continue; }
+    var key = new Date(dashJobs[i].date_received).toDateString();
+    for (var n = 0; n < days.length; n++) {
+      if (days[n].key == key) { days[n].count++; }
+    }
+  }
+
+  var max = 1;
+  for (var m = 0; m < days.length; m++) {
+    if (days[m].count > max) { max = days[m].count; }
+  }
+
+  var html = "";
+  for (var k = 0; k < days.length; k++) {
+    var height = Math.round(days[k].count / max * 130);
+    html += "<div class='week-col'>" +
+      "<span class='week-count'>" + days[k].count + "</span>" +
+      "<div class='week-bar' style='height: " + height + "px'></div>" +
+      "<span class='week-day'>" + days[k].label + "</span>" +
+      "</div>";
+  }
+  document.getElementById("week-chart").innerHTML = html;
+}
+
+// Donut chart: job orders by status
+function showStatusChart() {
+  var colors = ["#4f46e5", "#16a34a", "#f59e0b", "#ef4444", "#0ea5e9", "#a855f7", "#64748b"];
+  var counts = {};
+  for (var i = 0; i < dashJobs.length; i++) {
+    var s = dashJobs[i].status || "No status";
+    counts[s] = (counts[s] || 0) + 1;
+  }
+
+  var list = [];
+  for (var key in counts) { list.push({ name: key, count: counts[key] }); }
+  list.sort(function (a, b) { return b.count - a.count; });
+
+  var total = dashJobs.length;
+  var donut = document.getElementById("status-donut");
+  var legend = document.getElementById("status-legend");
+
+  if (total == 0) {
+    donut.style.background = "";
+    legend.innerHTML = "<p class='small-text'>No job orders yet.</p>";
+    return;
+  }
+
+  var stops = [];
+  var html = "";
+  var start = 0;
+  for (var n = 0; n < list.length; n++) {
+    var color = colors[n % colors.length];
+    var end = start + list[n].count / total * 100;
+    stops.push(color + " " + start + "% " + end + "%");
+    start = end;
+
+    html += "<div class='legend-item'>" +
+      "<span class='legend-dot' style='background:" + color + "'></span>" +
+      "<span>" + safe(list[n].name) + "</span>" +
+      "<span class='legend-count'>" + list[n].count + "</span>" +
+      "</div>";
+  }
+
+  donut.style.background = "conic-gradient(" + stops.join(", ") + ")";
+  legend.innerHTML = html;
 }
 
 
