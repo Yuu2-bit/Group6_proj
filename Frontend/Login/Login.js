@@ -18,7 +18,7 @@ function login() {
   if (username == "admin" && password == "admin123") {
     // Correct! Go to the dashboard page.
     // (No "/" at the start: Login.html is in the top folder, so the path starts from there.)
-    window.location.href = "Dashboard/Dashboard.html";
+    window.location.href = "Frontend/Dashboard/Dashboard.html";
   } else {
     // Wrong! Show an error message
     errorMessage.innerHTML = "Wrong username or password. Try again.";

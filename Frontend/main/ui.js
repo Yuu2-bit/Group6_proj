@@ -1,6 +1,5 @@
 
 (function () {
-
     var links = document.querySelectorAll(".menu-link");
 
     function clean(path) {
@@ -31,12 +30,9 @@
             }
         }
     }
-
 })();
 
-
 (function () {
-
     var reduce = window.matchMedia &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -131,7 +127,6 @@
             }
 
             animate(el, p, from);
-
         }).observe(el, {
             childList: true,
             characterData: true,
@@ -144,12 +139,9 @@
     for (var i = 0; i < numbers.length; i++) {
         watch(numbers[i]);
     }
-
 })();
 
-
 (function () {
-
     var box = document.querySelector(".welcome-box");
     var bar = document.querySelector(".sidebar");
 
@@ -159,12 +151,10 @@
 
     var script = document.currentScript;
     var scriptURL = script ? script.src : location.href;
-
-    var LOGIN_PAGE = new URL("../Login.html", scriptURL).href;
+    var LOGIN_PAGE = new URL("../../Login.html", scriptURL).href;
     var NAME_KEY = "display-name";
 
     async function accountLogout() {
-
         try {
             if (window.db && window.db.auth) {
                 var result = await window.db.auth.signOut();
@@ -172,14 +162,13 @@
                 if (result && result.error) {
                     console.error("Logout error:", result.error);
                     alert("Logout failed. Please try again.");
-                    return;
+                    return false;
                 }
             }
-
         } catch (e) {
             console.error("Logout error:", e);
             alert("Unable to log out. Please try again.");
-            return;
+            return false;
         }
 
         try {
@@ -189,7 +178,8 @@
             console.error("Storage error:", e);
         }
 
-        window.location.href = LOGIN_PAGE;
+        window.location.replace(LOGIN_PAGE);
+        return true;
     }
 
     async function accountChangePassword(currentPassword, newPassword) {
@@ -211,7 +201,6 @@
     }
 
     function checkPassword(current, next, again) {
-
         if (current === "" || next === "" || again === "") {
             return "Please fill in all three boxes.";
         }
@@ -254,7 +243,6 @@
     menu.setAttribute("role", "menu");
 
     menu.innerHTML =
-
         "<div class='acct-head'>" +
             "<span class='acct-pic'></span>" +
             "<div>" +
@@ -296,7 +284,6 @@
     bar.appendChild(menu);
 
     function showName() {
-
         var name = getName();
 
         for (var i = 0; i < nameEls.length; i++) {
@@ -313,11 +300,10 @@
     showName();
 
     function show(view) {
-
         var views = menu.querySelectorAll(".acct-view");
 
         for (var i = 0; i < views.length; i++) {
-            views[i].hidden = (views[i].dataset.view !== view);
+            views[i].hidden = views[i].dataset.view !== view;
         }
 
         var msgs = menu.querySelectorAll(".acct-msg");
@@ -354,7 +340,6 @@
     }
 
     function closeMenu() {
-
         menu.hidden = true;
         box.setAttribute("aria-expanded", "false");
 
@@ -366,13 +351,14 @@
     }
 
     function say(view, text, good) {
-
         var msg = menu.querySelector(
             "[data-view='" + view + "'] .acct-msg"
         );
 
-        msg.textContent = text;
-        msg.classList.toggle("ok", !!good);
+        if (msg) {
+            msg.textContent = text;
+            msg.classList.toggle("ok", !!good);
+        }
     }
 
     box.setAttribute("role", "button");
@@ -382,7 +368,6 @@
     box.setAttribute("title", "Account");
 
     function toggle() {
-
         if (menu.hidden) {
             openMenu();
         } else {
@@ -393,16 +378,13 @@
     box.addEventListener("click", toggle);
 
     box.addEventListener("keydown", function (e) {
-
         if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             toggle();
         }
-
     });
 
     document.addEventListener("click", function (e) {
-
         if (
             !menu.hidden &&
             !menu.contains(e.target) &&
@@ -410,20 +392,16 @@
         ) {
             closeMenu();
         }
-
     });
 
     document.addEventListener("keydown", function (e) {
-
         if (e.key === "Escape" && !menu.hidden) {
             closeMenu();
             box.focus();
         }
-
     });
 
     menu.addEventListener("keydown", function (e) {
-
         if (e.key !== "Enter" || e.target.tagName !== "INPUT") {
             return;
         }
@@ -437,11 +415,9 @@
         if (button) {
             button.click();
         }
-
     });
 
     menu.addEventListener("click", async function (e) {
-
         var btn = e.target.closest("button");
 
         if (!btn) {
@@ -454,17 +430,20 @@
         }
 
         if (btn.dataset.act === "logout") {
-
             btn.disabled = true;
             btn.textContent = "Logging out...";
 
-            await accountLogout();
+            var success = await accountLogout();
+
+            if (!success) {
+                btn.disabled = false;
+                btn.textContent = "Log out";
+            }
 
             return;
         }
 
         if (btn.dataset.act === "savename") {
-
             var input = document.getElementById("acct-name-input");
             var problem = checkName(input.value);
 
@@ -475,7 +454,10 @@
 
             try {
                 localStorage.setItem(NAME_KEY, input.value.trim());
-            } catch (err) {}
+            } catch (err) {
+                say("name", "Unable to save the display name.", false);
+                return;
+            }
 
             showName();
             say("name", "Saved.", true);
@@ -484,7 +466,6 @@
         }
 
         if (btn.dataset.act === "savepass") {
-
             var cur = document.getElementById("acct-cur").value;
             var next = document.getElementById("acct-new").value;
             var again = document.getElementById("acct-again").value;
@@ -518,7 +499,5 @@
 
             setTimeout(closeMenu, 1200);
         }
-
     });
-
 })();
