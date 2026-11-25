@@ -230,15 +230,7 @@ h2 {
   border-bottom: 1px solid var(--line);
 }
 
-.acct-pic {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background-color: var(--surface-3);
-  background-image: url("../main/Logo.png");
-  background-size: cover;
-  background-position: center;
-}
+
 
 .acct-name {
   font-weight: 600;
@@ -613,8 +605,18 @@ tbody tr:last-child td {
 }
 
 /* The avatar picture eases when you hover the profile */
-.circle {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+.circle,
+.acct-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--surface-3);
+  background-image: url("../main/Logo.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
 }
 
 .welcome-box:hover .circle {
