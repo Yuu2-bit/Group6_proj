@@ -173,9 +173,10 @@ function closeNewForm() {
 }
 
 async function saveJobOrder() {
-  var info = {
+    var info = {
     customerName: document.getElementById("new-customer").value.trim(),
     contact: document.getElementById("new-contact").value.trim(),
+    address: document.getElementById("new-address").value.trim(),
     device: document.getElementById("new-device").value.trim(),
     serial: document.getElementById("new-serial").value.trim(),
     service: document.getElementById("new-service").value,

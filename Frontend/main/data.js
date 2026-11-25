@@ -1,15 +1,6 @@
-// ===== data.js =====
-// ONE shared file used by every page (Main, Dashboard, Job Order, Customers, Inventory).
-// Save it as /main/data.js
-// Every page must load the Supabase library BEFORE this file:
-// <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-// <script src="/main/data.js"></script>
-
 var SUPABASE_URL = "https://qdqljodxhvxllldqzhof.supabase.co";
 var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkcWxqb2R4aHZ4bGxsZHF6aG9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzNzEwNjgsImV4cCI6MjExMDk0NzA2OH0.F4yoASDJ-UidPTTxWnSSlkecEpw9Dmni2CYPKpLhyfg";
 
-// Connect to the database. If something is wrong, the rest of this file still
-// loads (so the drop-down lists work) and a message is shown on the page.
 var db = null;
 var dbError = "";
 
@@ -27,7 +18,6 @@ var STATUS_LIST = ["For Checking", "In Repair", "Parts Available", "For Releasin
 var SERVICE_LIST = ["Screen Repair", "Battery Replacement", "Laptop Repair", "Water Damage Fix", "Charging Port Repair", "Other"];
 
 
-// Shows a small message at the bottom of the page when there is no database connection
 function showDemoNotice() {
   if (db != null || document.getElementById("db-notice")) { return; }
   var bar = document.createElement("div");
@@ -43,7 +33,6 @@ window.addEventListener("DOMContentLoaded", showDemoNotice);
 
 // ===== Small helper functions =====
 
-// Stops strange characters from breaking the page
 function safe(text) {
   if (text == null || text == "") { return "—"; }
   return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -53,48 +42,59 @@ function padNumber(n, size) { return String(n).padStart(size, "0"); }
 
 function customerCode(c) {
   if (c.customer_code) { return c.customer_code; }
-  return "CUST-" + padNumber(c.id, 6);        // example: CUST-000012
+  return "CUST-" + padNumber(c.id, 6);
 }
 
-function jobCode(j) { return "JO-" + padNumber(j.id, 5); }   // example: JO-00012
+function jobCode(j) { return "JO-" + padNumber(j.id, 5); }
 
 function isOpen(j) { return j.status != "Released" && j.status != "Cancelled"; }
 
+// Returns a valid Date, or null when the text is empty or not a date
+function toDate(dateText) {
+  if (!dateText) { return null; }
+  var d = new Date(dateText);
+  return isNaN(d.getTime()) ? null : d;
+}
+
 function daysSince(dateText) {
-  return Math.floor((Date.now() - new Date(dateText).getTime()) / 86400000);
+  var d = toDate(dateText);
+  if (d == null) { return 0; }
+  return Math.floor((Date.now() - d.getTime()) / 86400000);
 }
 
 function formatDate(dateText) {
-  var d = new Date(dateText);
+  var d = toDate(dateText);
+  if (d == null) { return "—"; }
   return padNumber(d.getMonth() + 1, 2) + "/" + padNumber(d.getDate(), 2) + "/" + d.getFullYear();
 }
 
 function formatDateTime(dateText) {
-  return new Date(dateText).toLocaleString("en-US", {
+  var d = toDate(dateText);
+  if (d == null) { return "—"; }
+  return d.toLocaleString("en-US", {
     month: "2-digit", day: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit"
   });
 }
 
 // How long a job has been in its current status
 function getAging(j) {
-  if (!isOpen(j)) { return null; }             // finished jobs have no aging
-  var days = daysSince(j.status_started);
-  var level = "normal";                        // 0-3 days
-  if (days >= 8) { level = "critical"; }       // 8+ days
-  else if (days >= 4) { level = "aging"; }     // 4-7 days
+  if (!isOpen(j)) { return null; }
+  var days = daysSince(j.status_started || j.date_received);
+  var level = "normal";
+  if (days >= 8) { level = "critical"; }
+  else if (days >= 4) { level = "aging"; }
   var word = (days == 1) ? " day" : " days";
   return { days: days, level: level, text: days + word + " · " + level.toUpperCase() };
 }
 
 
 // ===== Database functions =====
-// Note: Supabase sends back at most 1000 rows unless you raise the limit in its settings
 
 async function getCustomers() {
   if (db == null) { return []; }
   var r = await db.from("customers").select("*").limit(5000);
   if (r.error) { console.error(r.error.message); return []; }
-  r.data.sort(function (a, b) { return a.name.localeCompare(b.name); });
+  r.data.sort(function (a, b) { return (a.name || "").localeCompare(b.name || ""); });
   return r.data;
 }
 
@@ -106,6 +106,9 @@ async function getJobOrders() {
 
   for (var i = 0; i < r.data.length; i++) {
     var job = r.data[i];
+    // some tables call the date created_at: use whichever one exists
+    job.date_received = job.date_received || job.created_at || job.status_started || null;
+    job.status_started = job.status_started || job.date_received;
     job.customer_name = job.customers ? job.customers.name : "—";
     job.customer_code = job.customers ? customerCode(job.customers) : "—";
   }
@@ -119,17 +122,37 @@ async function addJobOrder(info) {
   if (db == null) { return dbError; }
   var customers = await getCustomers();
   var customerId = null;
+  var existing = null;
   for (var i = 0; i < customers.length; i++) {
-    if (customers[i].name.toLowerCase() == info.customerName.toLowerCase()) { customerId = customers[i].id; }
+    if ((customers[i].name || "").toLowerCase() == info.customerName.toLowerCase()) {
+      customerId = customers[i].id;
+      existing = customers[i];
+    }
   }
 
   if (customerId == null) {
-    var r1 = await db.from("customers").insert({ name: info.customerName, type: "Individual", contact: info.contact, status: "Active" }).select().single();
+    var newCustomer = { name: info.customerName, type: "Individual", contact: info.contact, status: "Active" };
+    if (info.address) { newCustomer.address = info.address; }
+    var r1 = await db.from("customers").insert(newCustomer).select().single();
     if (r1.error) { return r1.error.message; }
     customerId = r1.data.id;
+  } else if (info.address && existing && !existing.address) {
+    // fill in the address of an existing customer if it was empty (ignore errors)
+    await db.from("customers").update({ address: info.address }).eq("id", customerId);
   }
 
-  var r2 = await db.from("job_orders").insert({ customer_id: customerId, device: info.device, serial: info.serial, service: info.service, issue: info.issue, status: info.status, amount: info.amount });
+  var now = new Date().toISOString();
+  var r2 = await db.from("job_orders").insert({
+    customer_id: customerId,
+    device: info.device,
+    serial: info.serial,
+    service: info.service,
+    issue: info.issue,
+    status: info.status,
+    amount: info.amount,
+    date_received: now,
+    status_started: now
+  });
   if (r2.error) { return r2.error.message; }
   return null;
 }
@@ -143,8 +166,6 @@ async function updateJobStatus(id, status) {
 
 
 // ===== Auto update =====
-// Runs your function when you come back to the tab and every 10 seconds,
-// so new data from the database shows up by itself.
 function autoRefresh(fn) {
   window.addEventListener("focus", fn);
   setInterval(fn, 10000);
