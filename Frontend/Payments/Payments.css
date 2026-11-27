@@ -8,6 +8,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
 }
 
 /* Title on the left, buttons on the right */
@@ -25,10 +26,11 @@
   border: 1px solid var(--line);
   border-radius: 10px;
   padding: 16px;
+  min-width: 0;
 }
 
 
-/* ----- Date row ----- */
+/* ----- Date row (FIX: stays the same size in "View All") ----- */
 .pay-date-row {
   display: flex;
   align-items: center;
@@ -36,19 +38,32 @@
   gap: 10px;
 }
 
-.pay-date-row .input {
-  width: 180px;
-}
-
+/* the date box and the buttons never shrink or stretch */
+.pay-date-row .input,
 #payDate {
   width: 180px;
+  flex: 0 0 180px;
+}
+
+.pay-date-row .btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+/* the message always sits on its own line, with reserved height,
+   so a longer message cannot push or resize anything above it */
+#dateNote {
+  flex: 1 0 100%;
+  min-height: 20px;
+  line-height: 20px;
+  margin-top: 2px;
 }
 
 
-/* ----- The 4 number boxes ----- */
+/* ----- The 4 number boxes (FIX: equal width, big numbers cannot stretch them) ----- */
 .pay-stats {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -56,12 +71,15 @@
   display: block;
   font-size: 26px;
   margin: 6px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* On small screens: 2 boxes per row */
 @media (max-width: 800px) {
   .pay-stats {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -72,8 +90,11 @@
   font-size: 18px;
 }
 
+/* FIX: the list scrolls inside its own box, so many rows
+   do not make the whole page taller or wider */
 .pay-scroll {
-  overflow-x: auto;
+  overflow: auto;
+  max-height: 60vh;
   margin-top: 12px;
 }
 
@@ -84,11 +105,16 @@
 }
 
 .pay-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface);
   text-align: left;
   font-size: 12px;
   color: var(--muted);
   padding: 8px;
   border-bottom: 1px solid var(--line);
+  white-space: nowrap;
 }
 
 .pay-table td {
@@ -99,6 +125,7 @@
 /* the Amount column sits on the right */
 .pay-table .r {
   text-align: right;
+  white-space: nowrap;
 }
 
 /* the message when there are no payments */
@@ -179,16 +206,8 @@ dialog .err {
   min-height: 18px;
 }
 
-/* Cancel and Save buttons on the right */
-dialog .btns {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 8px;
-}
 
-
-/* ----- Fix: Cancel and Save buttons (no red bar behind them) ----- */
+/* ----- Cancel and Save buttons (no red bar behind them) ----- */
 dialog .btns {
   display: flex;
   justify-content: flex-end;

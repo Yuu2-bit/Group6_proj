@@ -4,8 +4,9 @@
 //
 // Tip: "await" means "wait here until the database answers".
 
-var payments = [];     // the payments of the date we are viewing
-var firstRender = true; // true until the table has shown rows once (used for the row animation)
+var payments = [];       // the payments we are viewing (one date, or all)
+var firstRender = true;  // true until the table has shown rows once (used for the row animation)
+var showAll = false;     // true when the "View All" button was pressed
 
 
 // ===== Small helper functions =====
@@ -30,17 +31,48 @@ function todayPH() {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Manila" });
 }
 
+// Adds one day to a "YYYY-MM-DD" text, example: 2026-11-30 -> 2026-12-01
+function nextDay(dateText) {
+  var parts = dateText.split("-");
+  var d = new Date(Date.UTC(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]) + 1));
+  return d.toISOString().slice(0, 10);
+}
+
+// Shows paid_date as a plain date, whether the column is "date" or "timestamptz"
+function showPaidDate(value) {
+  if (!value) { return ""; }
+  var text = String(value);
+  if (text.length <= 10) { return text; }
+  var d = new Date(text);
+  if (isNaN(d.getTime())) { return text.slice(0, 10); }
+  return d.toLocaleDateString("en-CA", { timeZone: "Asia/Manila" });
+}
+
 
 // ===== Saving and loading (Supabase table: payments) =====
 
-// Gets the payments of ONE date
-async function getPayments(date) {
-  var result = await db.from("payments").select("*").eq("paid_date", date);
+// Gets the payments of ONE date, or ALL payments when date is empty.
+// The range (start of the day up to the start of the next day, Philippine time)
+// works for both a "date" column and a "timestamptz" column.
+async function getPaymentsByDate(date) {
+  var query = db.from("payments").select("*");
+
+  if (date) {
+    var start = date + "T00:00:00+08:00";
+    var end = nextDay(date) + "T00:00:00+08:00";
+    query = query.gte("paid_date", start).lt("paid_date", end);
+  }
+
+  var result = await query
+    .order("paid_date", { ascending: false })
+    .limit(1000);
+
   if (result.error) {
     console.error(result.error.message);
-    return [];
+    byId("dateNote").textContent = "Error loading payments: " + result.error.message;
+    return null; // null = failed (so we do not hide the error message)
   }
-  return result.data;
+  return result.data || [];
 }
 
 // Adds a new payment. Returns an error message, or null when it worked.
@@ -54,9 +86,29 @@ async function savePaymentToDatabase(payment) {
 // ===== Load and draw the page =====
 
 async function loadPayments() {
+  if (db === null) {
+    byId("dateNote").textContent = "Not connected to the database.";
+    return;
+  }
+
   var date = byId("payDate").value;
-  payments = await getPayments(date);
-  byId("dateNote").textContent = "Showing payments received on " + date + " (Asia/Manila).";
+  var rows = await getPaymentsByDate(showAll ? "" : date);
+
+  if (rows === null) {
+    // keep the error message on the page and show an empty table
+    payments = [];
+    draw();
+    return;
+  }
+
+  payments = rows;
+
+  if (showAll) {
+    byId("dateNote").textContent = "Showing ALL payments (latest first, up to 1000).";
+  } else {
+    byId("dateNote").textContent = "Showing payments received on " + date + " (Asia/Manila).";
+  }
+
   draw();
 }
 
@@ -80,6 +132,7 @@ function draw() {
 
     // one table row for this payment (--i staggers the first-load animation)
     html += "<tr style='--i:" + Math.min(i, 15) + "'>" +
+      "<td>" + escapeText(showPaidDate(p.paid_date)) + "</td>" +
       "<td>" + escapeText(p.job_order_no) + "</td>" +
       "<td>" + escapeText(p.customer) + "</td>" +
       "<td>" + escapeText(p.method) + "</td>" +
@@ -91,7 +144,7 @@ function draw() {
   }
 
   if (html == "") {
-    html = "<tr><td colspan='7' class='pay-empty'>No payments for the selected date.</td></tr>";
+    html = "<tr><td colspan='8' class='pay-empty'>No payments found.</td></tr>";
   }
 
   byId("payBody").innerHTML = html;
@@ -108,15 +161,23 @@ function draw() {
 // ===== Date buttons =====
 
 byId("viewBtn").onclick = function () {
+  showAll = false;
   loadPayments();
 };
 
 byId("payDate").onchange = function () {
+  showAll = false;
   loadPayments();
 };
 
 byId("todayBtn").onclick = function () {
+  showAll = false;
   byId("payDate").value = todayPH();
+  loadPayments();
+};
+
+byId("allBtn").onclick = function () {
+  showAll = true;
   loadPayments();
 };
 
@@ -129,7 +190,7 @@ byId("addPay").onclick = function () {
   byId("pCustomer").value = "";
   byId("pAmount").value = 0;
   byId("pMethod").value = "Cash";
-  byId("pDate").value = byId("payDate").value;
+  byId("pDate").value = byId("payDate").value || todayPH();
   byId("pRef").value = "";
   byId("pStaff").value = "Admin";
   byId("pNotes").value = "";
@@ -178,6 +239,7 @@ byId("savePay").onclick = async function () {
   // 4. close the popup and show the date we just saved
   byId("payDlg").close();
   byId("payDate").value = payment.paid_date;
+  showAll = false;
   loadPayments();
 };
 
